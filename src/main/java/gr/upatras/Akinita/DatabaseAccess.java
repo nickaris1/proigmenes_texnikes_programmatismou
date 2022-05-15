@@ -23,20 +23,32 @@ public class DatabaseAccess {
      *
      * @throws SQLException throws sql Exception if file not found
      */
-    public static void connect() throws SQLException {
-        File file = new File(Objects.requireNonNull(DatabaseAccess.class.getClassLoader().getResource(SQLiteFILENAME)).getFile());
+    public static void connect(final String fileName) throws SQLException {
+        File file = new File(Objects.requireNonNull(DatabaseAccess.class.getClassLoader().getResource(fileName)).getFile());
         log.info(file.getAbsolutePath());
         connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
     }
 
     /**
      * Select * from tableName
+     *
      * @param tableName name of table in database
-     * @param callback callback listener. calls run method with ResultSet parameter from the sqlite response.
+     * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
      */
     public static void get(String tableName, @NotNull DatabaseAccessCallback callback) {
+        get(SQLiteFILENAME, tableName, callback);
+    }
+
+    /**
+     * Select * from tableName in fileName database
+     *
+     * @param fileName  Filename for the database (we can use custom database for unit test)
+     * @param tableName name of table in database
+     * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
+     */
+    public static void get(String fileName, String tableName, @NotNull DatabaseAccessCallback callback) {
         try {
-            connect();
+            connect(fileName);
 
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
