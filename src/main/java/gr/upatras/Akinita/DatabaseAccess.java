@@ -70,6 +70,13 @@ public class DatabaseAccess {
     }
 
 
+    /**
+     * Select * from tableName in fileName database
+     *
+     * @param tableName name of table in database
+     * @param id Id of primary key in table
+     * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
+     */
     public static void getById(String tableName, int id, @NotNull DatabaseAccessCallback callback) {
         getById(SQLiteFILENAME, tableName, id, callback);
     }
@@ -105,9 +112,46 @@ public class DatabaseAccess {
     }
 
 
+    /**
+     * Select * from tableName in fileName database
+     *
+     * @param tableName name of table in database
+     * @param query query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
+     */
+    public static Boolean addEntry(String tableName, String query) {
+        return addEntry(SQLiteFILENAME, tableName, query);
+    }
 
+    /**
+     * Select * from tableName in fileName database <BR>
+     *
+     * @param fileName  Filename for the database (we can use custom database for unit test)
+     * @param tableName name of table in database
+     * @param query query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
+     */
+    public static Boolean addEntry(String fileName, String tableName, String query) {
+        try {
+            connect(fileName);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            String q = "INSERT INTO " + tableName + " " + query + ";";
+            log.info(q);
+            statement.execute(q);
 
-
+            if (connection != null) connection.close();
+            return true;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                log.error(e.getMessage());
+            }
+        }
+        return false;
+    }
 
     /**
      *

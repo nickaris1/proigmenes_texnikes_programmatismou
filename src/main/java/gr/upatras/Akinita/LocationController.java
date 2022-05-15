@@ -2,10 +2,9 @@ package gr.upatras.Akinita;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class LocationController {
 
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocations() {
-        log.debug("Getting Locations");
+        log.info("Getting all locations");
         List<Location> locations = new ArrayList<>();
 
         DatabaseAccess.get("LOCATION", (rs, primaryKeys) -> {
@@ -35,7 +34,7 @@ public class LocationController {
 
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public Location getLocation(@PathVariable("id") int id) {
-        log.debug("Getting Location¨" + id);
+        log.info("Getting Location¨" + id);
         final Location[] newLocation = {null};
 
         DatabaseAccess.getById("LOCATION", id, (rs, primaryKeys) -> {
@@ -51,4 +50,15 @@ public class LocationController {
         return newLocation[0];
     }
 
+    @RequestMapping(value = "/locations", produces = { "application/json;charset=utf-8" }, consumes = {"application/json;charset=utf-8" }, method = RequestMethod.POST)
+    public ResponseEntity<Location> createProduct(@RequestBody Location location) {
+        log.info( "Will add a new location" );
+        String q = "(\"Area_code\", \"City\", \"Area\", \"County\") VALUES (\"" + location.getPostCode() + "\", \"" + location.getCity() + "\", \"" + location.getArea() + "\", \"" + location.getCounty() + "\")";
+        boolean  res = DatabaseAccess.addEntry("LOCATION", q);
+        if (res) {
+            return new ResponseEntity<>(location, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(location, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

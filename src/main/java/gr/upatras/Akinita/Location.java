@@ -10,7 +10,7 @@ public class Location {
     private int postCode;
 
 
-    public Location() {}
+//    public Location() {}
 
     public Location(String city, String area, String county, int postCode) {
         this.city = city;
