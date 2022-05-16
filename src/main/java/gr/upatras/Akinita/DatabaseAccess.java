@@ -180,6 +180,7 @@ public class DatabaseAccess {
             connect(fileName);
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
             String q = "INSERT INTO " + tableName + " " + query + ";";
             log.info(q);
             statement.execute(q);
@@ -198,6 +199,51 @@ public class DatabaseAccess {
         }
         return false;
     }
+
+    /**
+     * Select * from tableName in fileName database
+     *
+     * @param tableName name of table in database
+     * @param id Id of primary key in table
+     */
+    public static Boolean deleteEntry(String tableName, int id) {
+        return deleteEntry(SQLiteFILENAME, tableName, id);
+    }
+
+    /**
+     * Select * from tableName in fileName database <BR>
+     *
+     * @param fileName  Filename for the database (we can use custom database for unit test)
+     * @param tableName name of table in database
+     * @param id Id of primary key in table
+     */
+    public static Boolean deleteEntry(String fileName, String tableName, int id) {
+        try {
+            connect(fileName);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            List<String> pk = getPrimaryKeys(connection.getMetaData().getPrimaryKeys(null, null, tableName));
+            String q = "DELETE FROM " + tableName + " WHERE "  + pk.get(0) + "=" + id;
+            log.info(q);
+            statement.execute(q);
+
+            if (connection != null) connection.close();
+            return true;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                log.error(e.getMessage());
+            }
+        }
+        return false;
+    }
+
+
+
 
     /**
      *
