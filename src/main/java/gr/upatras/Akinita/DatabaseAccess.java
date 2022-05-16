@@ -76,7 +76,7 @@ public class DatabaseAccess {
      * Select * from tableName in fileName database
      *
      * @param tableName name of table in database
-     * @param id Id of primary key in table
+     * @param id        Id of primary key in table
      * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
      */
     public static void getById(String tableName, int id, @NotNull DatabaseAccessCallback callback) {
@@ -88,7 +88,7 @@ public class DatabaseAccess {
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
-     * @param id Id of primary key in table
+     * @param id        Id of primary key in table
      * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
      */
     public static void getById(String fileName, String tableName, int id, @NotNull DatabaseAccessCallback callback) {
@@ -118,7 +118,7 @@ public class DatabaseAccess {
      * Select * from tableName in fileName database
      *
      * @param tableName name of table in database
-     * @param query eg: column_name = value
+     * @param query     eg: column_name = value
      * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
      */
     public static void getCustom(String tableName, String query, @NotNull DatabaseAccessCallback callback) {
@@ -130,7 +130,7 @@ public class DatabaseAccess {
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
-     * @param query eg: column_name = value
+     * @param query     eg: column_name = value
      * @param callback  callback listener. calls run method with ResultSet parameter from the sqlite response.
      */
     public static void getCustom(String fileName, String tableName, String query, @NotNull DatabaseAccessCallback callback) {
@@ -162,7 +162,7 @@ public class DatabaseAccess {
      * Select * from tableName in fileName database
      *
      * @param tableName name of table in database
-     * @param query query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
+     * @param query     query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
      */
     public static Boolean addEntry(String tableName, String query) {
         return addEntry(SQLiteFILENAME, tableName, query);
@@ -173,7 +173,7 @@ public class DatabaseAccess {
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
-     * @param query query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
+     * @param query     query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
      */
     public static Boolean addEntry(String fileName, String tableName, String query) {
         try {
@@ -204,7 +204,7 @@ public class DatabaseAccess {
      * Select * from tableName in fileName database
      *
      * @param tableName name of table in database
-     * @param id Id of primary key in table
+     * @param id        Id of primary key in table
      */
     public static Boolean deleteEntry(String tableName, int id) {
         return deleteEntry(SQLiteFILENAME, tableName, id);
@@ -215,7 +215,7 @@ public class DatabaseAccess {
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
-     * @param id Id of primary key in table
+     * @param id        Id of primary key in table
      */
     public static Boolean deleteEntry(String fileName, String tableName, int id) {
         try {
@@ -223,7 +223,7 @@ public class DatabaseAccess {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             List<String> pk = getPrimaryKeys(connection.getMetaData().getPrimaryKeys(null, null, tableName));
-            String q = "DELETE FROM " + tableName + " WHERE "  + pk.get(0) + "=" + id;
+            String q = "DELETE FROM " + tableName + " WHERE " + pk.get(0) + "=" + id;
             log.info(q);
             statement.execute(q);
 
@@ -243,16 +243,13 @@ public class DatabaseAccess {
     }
 
 
-
-
     /**
-     *
      * @param primaryKeys Result set
      * @return returns list with primary keys
      */
     private static List<String> getPrimaryKeys(ResultSet primaryKeys) {
         List<String> primaryKeysArray = new ArrayList<>();
-        try{
+        try {
             while (primaryKeys.next()) {
                 String columnName = primaryKeys.getString("COLUMN_NAME");
                 primaryKeysArray.add(columnName);
@@ -265,7 +262,7 @@ public class DatabaseAccess {
         return primaryKeysArray;
     }
 
-    public static <T extends Entity>String queryCreator(T obj) {
+    public static <T extends Entity> String queryCreator(T obj) {
         StringJoiner query = new StringJoiner("");
 
         for (Field field : obj.getClass().getDeclaredFields()) {

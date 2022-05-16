@@ -12,8 +12,6 @@ public class Location extends Entity {
     private Integer postCode;
 
 
-
-
 //    public Location() {}
 
     public Location(String city, String area, String county, Integer postCode) {

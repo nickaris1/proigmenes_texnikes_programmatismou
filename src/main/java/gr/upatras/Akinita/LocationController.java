@@ -20,7 +20,7 @@ public class LocationController {
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocations() {
         log.info("Getting all locations");
-        final List<Location> []locations = new List[]{null};
+        final List<Location>[] locations = new List[]{null};
 
         DatabaseAccess.get("LOCATION", (rs, primaryKeys) -> {
             locations[0] = getLocationList(rs, primaryKeys);
@@ -31,7 +31,7 @@ public class LocationController {
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocation(@PathVariable("id") int id) {
         log.info("Getting Location¨" + id);
-        final List<Location> []locations = new List[]{null};
+        final List<Location>[] locations = new List[]{null};
 
         DatabaseAccess.getById("LOCATION", id, (rs, primaryKeys) -> {
             locations[0] = getLocationList(rs, primaryKeys);
@@ -59,7 +59,7 @@ public class LocationController {
 
     @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Location> searchLocation(@RequestBody Location location) {
-        final List<Location> []locations = new List[]{null};
+        final List<Location>[] locations = new List[]{null};
         String query = DatabaseAccess.queryCreator(location);
         log.info(query);
         DatabaseAccess.getCustom("LOCATION", query, ((rs, primaryKeys) -> {
@@ -71,8 +71,8 @@ public class LocationController {
     private List<Location> getLocationList(ResultSet rs, List<String> primaryKeys) {
         List<Location> locations = new ArrayList<>();
         try {
-            while(rs.next()) {
-                Location newLocation = new Location(rs.getString("City"), rs.getString("Area"),rs.getString("County"), Integer.parseInt(rs.getString("Area_code")));
+            while (rs.next()) {
+                Location newLocation = new Location(rs.getString("City"), rs.getString("Area"), rs.getString("County"), Integer.parseInt(rs.getString("Area_code")));
                 locations.add(newLocation);
             }
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class LocationController {
         return locations;
     }
 
-    @RequestMapping(value = "/locations/{id}" , produces = { "application/json;charset=utf-8" }, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteLocationById(@PathVariable("id") int id) {
         boolean res = DatabaseAccess.deleteEntry("LOCATION", id);
         if (res) {
