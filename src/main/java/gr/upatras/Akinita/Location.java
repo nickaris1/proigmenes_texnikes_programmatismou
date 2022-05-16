@@ -1,22 +1,32 @@
 package gr.upatras.Akinita;
 
+import java.util.HashMap;
+
 /**
  *
  */
-public class Location {
+public class Location extends Entity {
     private String city;
     private String area;
     private String county;
-    private int postCode;
+    private Integer postCode;
+
+
 
 
 //    public Location() {}
 
-    public Location(String city, String area, String county, int postCode) {
+    public Location(String city, String area, String county, Integer postCode) {
         this.city = city;
         this.area = area;
         this.county = county;
         this.postCode = postCode;
+
+        fieldsMap = new HashMap<>();
+        fieldsMap.put("city", "City");
+        fieldsMap.put("postCode", "Area_code");
+        fieldsMap.put("county", "County");
+        fieldsMap.put("area", "Area");
     }
 
 
@@ -44,11 +54,11 @@ public class Location {
         this.county = county;
     }
 
-    public int getPostCode() {
+    public Integer getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(int postCode) {
+    public void setPostCode(Integer postCode) {
         this.postCode = postCode;
     }
 }

@@ -6,9 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 @RestController
 public class LocationController {
@@ -50,15 +53,27 @@ public class LocationController {
         return newLocation[0];
     }
 
-    @RequestMapping(value = "/locations", produces = { "application/json;charset=utf-8" }, consumes = {"application/json;charset=utf-8" }, method = RequestMethod.POST)
-    public ResponseEntity<Location> createProduct(@RequestBody Location location) {
-        log.info( "Will add a new location" );
-        String q = "(\"Area_code\", \"City\", \"Area\", \"County\") VALUES (\"" + location.getPostCode() + "\", \"" + location.getCity() + "\", \"" + location.getArea() + "\", \"" + location.getCounty() + "\")";
-        boolean  res = DatabaseAccess.addEntry("LOCATION", q);
+    @RequestMapping(value = "/locations", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
+    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
+        log.info("Will add a new location");
+        String q;
+        if (location.getPostCode() != null) {
+            q = "(\"Area_code\", \"City\", \"Area\", \"County\") VALUES (\"" + location.getPostCode() + "\", \"" + location.getCity() + "\", \"" + location.getArea() + "\", \"" + location.getCounty() + "\")";
+        } else {
+            q = "(\"City\", \"Area\", \"County\") VALUES (\"" + location.getCity() + "\", \"" + location.getArea() + "\", \"" + location.getCounty() + "\")";
+        }
+        boolean res = DatabaseAccess.addEntry("LOCATION", q);
         if (res) {
             return new ResponseEntity<>(location, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(location, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
+    public ResponseEntity<Location> searchLocation(@RequestBody Location location) {
+//        List<String> query = new ArrayList<>();
+        log.info(DatabaseAccess.queryCreator(location));
+        return new ResponseEntity<>(location, HttpStatus.BAD_REQUEST);
     }
 }
