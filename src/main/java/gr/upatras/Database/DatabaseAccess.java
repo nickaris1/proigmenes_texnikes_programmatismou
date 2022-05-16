@@ -1,4 +1,4 @@
-package gr.upatras.Akinita;
+package gr.upatras.Database;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -6,12 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 
 /**
@@ -29,7 +27,7 @@ public class DatabaseAccess {
      */
     public static void connect(final String fileName) throws SQLException {
         File file = new File(Objects.requireNonNull(DatabaseAccess.class.getClassLoader().getResource(fileName)).getFile());
-        log.info(file.getAbsolutePath());
+        log.debug(file.getAbsolutePath());
         connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
     }
 
@@ -44,7 +42,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database
+     * Select * from tableName
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
@@ -71,9 +69,8 @@ public class DatabaseAccess {
         }
     }
 
-
     /**
-     * Select * from tableName in fileName database
+     * Select * from tableName where &#60;primarykey&#62;=id
      *
      * @param tableName name of table in database
      * @param id        Id of primary key in table
@@ -84,7 +81,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database
+     * Select * from tableName where &#60;primarykey&#62;=id
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
@@ -115,7 +112,7 @@ public class DatabaseAccess {
 
 
     /**
-     * Select * from tableName in fileName database
+     * Select * from tableName WHERE query
      *
      * @param tableName name of table in database
      * @param query     eg: column_name = value
@@ -126,7 +123,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database
+     * Select * from tableName WHERE query
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
@@ -159,7 +156,7 @@ public class DatabaseAccess {
 
 
     /**
-     * Select * from tableName in fileName database
+     * INSERT INTO tableName query
      *
      * @param tableName name of table in database
      * @param query     query eg:  (column1, column2, column3, ...) VALUES (value1, value2, value3, ...)
@@ -169,7 +166,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database <BR>
+     * INSERT INTO tableName query
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
@@ -201,7 +198,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database
+     * DELETE FROM tableName WHERE &#60;primarykey&#62;=id
      *
      * @param tableName name of table in database
      * @param id        Id of primary key in table
@@ -211,7 +208,7 @@ public class DatabaseAccess {
     }
 
     /**
-     * Select * from tableName in fileName database <BR>
+     * DELETE FROM tableName WHERE &#60;primarykey&#62;=id
      *
      * @param fileName  Filename for the database (we can use custom database for unit test)
      * @param tableName name of table in database
@@ -224,6 +221,49 @@ public class DatabaseAccess {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             List<String> pk = getPrimaryKeys(connection.getMetaData().getPrimaryKeys(null, null, tableName));
             String q = "DELETE FROM " + tableName + " WHERE " + pk.get(0) + "=" + id;
+            log.info(q);
+            statement.execute(q);
+
+            if (connection != null) connection.close();
+            return true;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                log.error(e.getMessage());
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Update tableName SET query WHERE  &#60;primarykey&#62;=id;
+     *
+     * @param tableName name of table in database
+     * @param id        Id of primary key in table
+     */
+    public static Boolean updateEntry(String tableName, int id, String query) {
+        return updateEntry(SQLiteFILENAME, tableName, id, query);
+    }
+
+    /**
+     * Update tableName SET query WHERE  &#60;primarykey&#62;=id;
+     *
+     * @param fileName  Filename for the database (we can use custom database for unit test)
+     * @param tableName name of table in database
+     * @param id        Id of primary key in table
+     */
+    public static Boolean updateEntry(String fileName, String tableName, int id, String query) {
+        try {
+            connect(fileName);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            List<String> pk = getPrimaryKeys(connection.getMetaData().getPrimaryKeys(null, null, tableName));
+            String q = "UPDATE " + tableName + " SET " + query + " WHERE " + pk.get(0) + "=" + id;
             log.info(q);
             statement.execute(q);
 
@@ -262,30 +302,8 @@ public class DatabaseAccess {
         return primaryKeysArray;
     }
 
-    public static <T extends Entity> String queryCreator(T obj) {
-        StringJoiner query = new StringJoiner("");
-
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            try {
-                field.setAccessible(true); // if you want to modify private fields
-                if (field.get(obj) != null && !String.valueOf(field.getType()).equals("interface java.util.Map")) {
-                    query.add("\"");
-                    query.add(obj.getFieldsMap().get(field.getName()));
-                    query.add("\"=\"");
-                    query.add(String.valueOf(field.get(obj)));
-                    query.add("\" and ");
-                }
-            } catch (IllegalAccessException e) {
-                log.error(e.getMessage());
-            }
-        }
-        String qStr = query.toString();
-        return qStr.substring(0, qStr.length() - 5);
-    }
-
     public DatabaseAccess() {
     }
-
 }
 
 

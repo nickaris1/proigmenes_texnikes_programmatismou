@@ -1,4 +1,4 @@
-package gr.upatras.Akinita;
+package gr.upatras.Database;
 
 import java.sql.ResultSet;
 import java.util.List;
