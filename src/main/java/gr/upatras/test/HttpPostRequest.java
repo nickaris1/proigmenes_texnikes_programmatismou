@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HttpPostRequest {
 
-    private static final String url = "http://localhost:8080/locations";
+    private static final String url = "http://localhost:8080/locations/";
 
     public static void main(String[] args) throws URISyntaxException {
         HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();

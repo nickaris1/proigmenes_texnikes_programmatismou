@@ -40,7 +40,7 @@ public class LocationController {
         return locations[0];
     }
 
-    @RequestMapping(value = "/locations", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
         log.info("Will add a new location");
         String q = DatabaseUtil.queryInsertParamCreator(location);
@@ -97,8 +97,15 @@ public class LocationController {
             }
         }));
 
-
-        return new ResponseEntity<>(fLocations[0].get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
+        if (fLocations[0] != null) {
+            if (fLocations[0].size() > 0) {
+                return new ResponseEntity<>(fLocations[0].get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
+            } else {
+                return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        }
     }
 
     private List<Location> getLocationList(ResultSet rs, List<String> primaryKeys) {
