@@ -45,46 +45,32 @@ jobs:
         distribution: 'adopt'
         cache: maven
 
-#    - run: mvn --batch-mode --update-snapshots verify
-#    - run: mkdir staging && cp "target"/*jar-with-dependencies.jar staging
+
     - run: mvn -B package --file pom.xml -DskipTests
-    - name: Automatic Releases
-      uses: marvinpinto/action-automatic-releases@v1.2.1
-      with:
-        # GitHub secret token
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        # Git tag (for automatic releases)
-        automatic_release_tag: ${{ github.ref }} # optional
-
-        # Should this release be marked as a pre-release?
-        prerelease: true # optional, default is true
-        # Release title (for automatic releases)
-        title: Release ${{ github.run_number }} # optional
-        # Assets to upload to the release
-        files: target/*jar-with-dependencies.jar # optional
-
-#     - name: Create Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    
+    - name: Get version
+      run: |
+        VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
+        echo "::set-output name=version::$VERSION"
+      id: get_version
+    
+    - run: echo ${{ steps.get_version.outputs.version}}
+    
+    
+#     - name: Automatic Releases
+#       uses: marvinpinto/action-automatic-releases@v1.2.1
 #       with:
-#         tag_name: ${{ github.ref }}
-#         release_name: Release ${{ github.ref }}
-#         body: |
-#           Changes in this Release
-#           - First Change
-#           - Second Change
-#         draft: false
-#         prerelease: true
-   
-#     - name: Upload Release Asset
-#       uses: actions/upload-release-asset@v1
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       with:
-#         upload_url: ${{ steps.create_release.outputs.upload_url }}
-#         asset_path: target/*jar-with-dependencies.jar
-#         asset_name: akinita-v${{ github.run_number }}.jar
-#         asset_content_type: application/jar
+#         # GitHub secret token
+#         repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#         # Git tag (for automatic releases)
+#         automatic_release_tag: ${{ github.ref }} # optional
+
+#         # Should this release be marked as a pre-release?
+#         prerelease: true # optional, default is true
+#         # Release title (for automatic releases)
+#         title: Release ${{ github.run_number }} # optional
+#         # Assets to upload to the release
+#         files: target/*jar-with-dependencies.jar # optional
+
+
 
