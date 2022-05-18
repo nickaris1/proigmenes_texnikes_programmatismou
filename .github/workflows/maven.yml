@@ -41,6 +41,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+
 #    - run: mvn --batch-mode --update-snapshots verify
 #    - run: mkdir staging && cp "target"/*jar-with-dependencies.jar staging
     - run: mvn -B package --file pom.xml -DskipTests
@@ -68,3 +69,4 @@ jobs:
         asset_path: target/*jar-with-dependencies.jar
         asset_name: akinita-v${{ github.run_number }}.jar
         asset_content_type: application/jar
+
