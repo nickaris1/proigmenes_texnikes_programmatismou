@@ -42,4 +42,5 @@ jobs:
       with:
         name: Package
         path: staging
-  
+        
+    - run: exit 0
