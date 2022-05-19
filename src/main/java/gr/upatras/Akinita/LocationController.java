@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 public class LocationController {
@@ -20,24 +21,20 @@ public class LocationController {
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocations() {
         log.info("Getting all locations");
-        final List<Location>[] locations = new List[]{null};
+        AtomicReference<List<Location>> locations = new AtomicReference<>();
 
-        DatabaseAccess.get("LOCATION", (rs, primaryKeys) -> {
-            locations[0] = getLocationList(rs, primaryKeys);
-        });
-        return locations[0];
+        DatabaseAccess.get("LOCATION", (rs, primaryKeys) -> locations.set(getLocationList(rs, primaryKeys)));
+        return locations.get();
     }
 
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocation(@PathVariable("id") int id) {
         log.info("Getting Location¨" + id);
-        final List<Location>[] locations = new List[]{null};
+        AtomicReference<List<Location>> locations = new AtomicReference<>();
 
-        DatabaseAccess.getById("LOCATION", id, (rs, primaryKeys) -> {
-            locations[0] = getLocationList(rs, primaryKeys);
-        });
+        DatabaseAccess.getById("LOCATION", id, (rs, primaryKeys) -> locations.set(getLocationList(rs, primaryKeys)));
 
-        return locations[0];
+        return locations.get();
     }
 
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
@@ -55,13 +52,11 @@ public class LocationController {
 
     @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Location> searchLocation(@RequestBody Location location) {
-        final List<Location>[] locations = new List[]{null};
+        AtomicReference<List<Location>> locations = new AtomicReference<>();
         String query = DatabaseUtil.querySearchParamCreator(location);
         log.info(query);
-        DatabaseAccess.getCustom("LOCATION", query, ((rs, primaryKeys) -> {
-            locations[0] = getLocationList(rs, primaryKeys);
-        }));
-        return locations[0];
+        DatabaseAccess.getCustom("LOCATION", query, ((rs, primaryKeys) -> locations.set(getLocationList(rs, primaryKeys))));
+        return locations.get();
     }
 
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
@@ -77,11 +72,10 @@ public class LocationController {
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
     ResponseEntity<Location> updateLocation(@RequestBody Location body, @PathVariable("id") int id) {
         Boolean[] res = {null};
-        final List<Location>[] fLocations = new List[]{null};
-
+        AtomicReference<List<Location>> fLocations = new AtomicReference<>();
         DatabaseAccess.getById("LOCATION", id, ((rs, primaryKeys) -> {
             List<Location> locations = getLocationList(rs, primaryKeys); // if entry exists
-            fLocations[0] = locations;
+            fLocations.set(locations);
             if (locations.isEmpty()) {
                 res[0] = false;
             } else {
@@ -90,16 +84,14 @@ public class LocationController {
                 if (res[0]) {
                     int tempId = ((body.getPostCode() == null) || (body.getPostCode() == id) ? id : body.getPostCode());
 
-                    DatabaseAccess.getById("LOCATION", tempId, ((rs2, primaryKeys2) -> {
-                        fLocations[0] = getLocationList(rs2, primaryKeys2);
-                    }));
+                    DatabaseAccess.getById("LOCATION", tempId, ((rs2, primaryKeys2) -> fLocations.set(getLocationList(rs2, primaryKeys2))));
                 }
             }
         }));
 
-        if (fLocations[0] != null) {
-            if (fLocations[0].size() > 0) {
-                return new ResponseEntity<>(fLocations[0].get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
+        if (fLocations.get() != null) {
+            if (fLocations.get().size() > 0) {
+                return new ResponseEntity<>(fLocations.get().get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
             } else {
                 return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
             }
@@ -108,6 +100,7 @@ public class LocationController {
         }
     }
 
+    @SuppressWarnings("unused")
     private List<Location> getLocationList(ResultSet rs, List<String> primaryKeys) {
         List<Location> locations = new ArrayList<>();
         try {
