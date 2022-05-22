@@ -37,22 +37,36 @@ CREATE TABLE IF NOT EXISTS "OWNER" (
     PRIMARY KEY("AFM")
 );
 
-DROP TABLE IF EXISTS "TRANSACTION";
-CREATE TABLE IF NOT EXISTS "TRANSACTION" (
-    "transaction_id" integer	NOT NULL,
-    "property_id" integer,
-    "type" varchar(255),
+DROP TABLE IF EXISTS "SALE";
+CREATE TABLE IF NOT EXISTS "SALE" (
+    "id" integer		NOT NULL,
+    "date" date,
     "price" real,
     "tm" real,
-    "date" date,
+    "price_tm" real DEFAULT NULL,
 
+    "rental" boolean DEFAULT FALSE,
+
+    "warranty" integer DEFAULT NULL,
+    "startdate" date DEFAULT NULL,
+    "enddate" date DEFAULT NULL,
+    PRIMARY KEY("id")
+);
+
+
+DROP TABLE IF EXISTS "GOES_FOR";
+CREATE TABLE IF NOT EXISTS "GOES_FOR" (
+    "id" integer	NOT NULL,
+    "property_id" integer NOT NULL,
+    "sale_id" integer NOT NULL,
     CONSTRAINT "GOES_FOR_PROPERTY_FK" FOREIGN KEY("property_id") REFERENCES "PROPERTY"("id") ON DELETE CASCADE	ON UPDATE CASCADE,
-    PRIMARY KEY("transaction_id")
+    CONSTRAINT "GOES_FOR_SALE_FK" FOREIGN KEY("sale_id") REFERENCES "SALE"("id") ON DELETE CASCADE	ON UPDATE CASCADE,
+    PRIMARY KEY("id")
 
 );
 
 
-
+----
 INSERT INTO "LOCATION" ("Area_code", "City", "Area", "County") VALUES
     (15125, "Αθήνα", 		"ΜΑΡΟΥΣΙ",      "Ελλάδα"),
     (15127, "Αθήνα", 		"ΜΕΛΙΣΣΙΑ",     "Ελλάδα"),
@@ -66,7 +80,7 @@ INSERT INTO "LOCATION" ("Area_code", "City", "Area", "County") VALUES
     (54351, "Θεσσαλονίκη", 	"ΑΝΩ ΤΟΥΜΠΑ", 	"Ελλάδα"),
     (55534, "Θεσσαλονίκη", 	"ΠΥΛΑΙΑ", 		"Ελλάδα");
 
-
+----
 INSERT INTO "OWNER" ("AFM", "Fname", "Lname", "Phone") VALUES
     (0000, "Sinus", 		"Lebastian", 	4200617621),
     (0001, "Pranav", 		"Farley", 		7830228455),
@@ -80,7 +94,7 @@ INSERT INTO "OWNER" ("AFM", "Fname", "Lname", "Phone") VALUES
     (0009, "Luna", 			"Amos", 		4150276408);
 
 
-
+----
 INSERT INTO "PROPERTY" ("id", "listed_price", "tm", "type", "Road", "Address_num", "Floor", "Availability", "owner_afm", "area_code") VALUES
     (000000, 125000,	104,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΜΑΡΚΟΥ ΜΠΟΤΣΑΡΗ",	   	23,		5,	TRUE, 0008, 17562), 	--sale apt
     (000001, 103000,	81,		"ΔΙΑΜΕΡΙΣΜΑ",   "ΑΝΔΡΟΥ",				 7,		2,	TRUE, 0004, 54351), 	--sale apt
@@ -98,22 +112,32 @@ INSERT INTO "PROPERTY" ("id", "listed_price", "tm", "type", "Road", "Address_num
     (000013, 10000000,	4600,	"ΞΕΝΟΔΟΧΕΙΟ",   "ΚΟΛΟΚΟΤΡΩΝΗ", 			49,	 NULL,	TRUE, 0005, 26221), 	--sale hotel
     (000014, 450000,	130,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΠΟΝΤΟΥ", 				12,		3,	TRUE, 0001, 15127); 	--sale apt
 
-INSERT INTO "TRANSACTION" ("transaction_id", "property_id", "type", "price", "tm", "date") VALUES
-(1000000, 000000, "SALE",   125000,	    104,	NULL),
-(1000001, 000001, "SALE",   103000,	    81,		NULL),
-(2000000, 000002, "RENTAL", 5000,		550,	NULL),
-(2000001, 000003, "RENTAL", 380,		32,		NULL),
-(1000002, 000004, "SALE",   117000,	    467,	"2021-03-23"),
-(1000003, 000005, "SALE",   35000,	    139,	NULL),
-(2000002, 000006, "RENTAL", 500,		62,		"2021-04-12"),
-(2000003, 000007, "RENTAL", 730,		90,		"2020-01-01"),
-(2000004, 000008, "RENTAL", 800,		280,	NULL),
-(1000004, 000009, "SALE",   230000,	    275,	"2021-11-13"),
-(2000005, 000010, "RENTAL", 2000,	    350,	NULL),
-(1000005, 000011, "SALE",   32000,	    200,	NULL),
-(1000006, 000012, "SALE",   100000,	    60,		"2021-02-05"),
-(1000007, 000013, "SALE",   10000000,   4600,	"2019-09-13"),
-(1000008, 000014, "SALE",   45000,	    130,	NULL);
 
+----
+INSERT INTO "GOES_FOR" ("property_id", "sale_id") VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6, 6),
+    (7, 7),
+    (8, 8),
+    (9, 9),
+    (8, 10);
+
+----
+
+INSERT INTO "SALE" ("id", "price", "tm", "date", "rental", "warranty", "startdate", "enddate") VALUES
+    (1, 125000,	104,	NULL,           false, NULL, NULL, NULL),
+    (2, 103000,	81,		NULL,           false, NULL, NULL, NULL),
+    (3, 117000,	467,	"2021-03-23",   false, NULL, NULL, NULL),
+    (4, 35000,     139,	NULL,           false, NULL, NULL, NULL),
+    (5, 230000,	275,	"2021-11-13",   false, NULL, NULL, NULL),
+    (6, 32000,     200,	NULL,           false, NULL, NULL, NULL),
+    (7, 700,	    60,		"2021-02-05",   true, 700, "2021-02-05", "2022-02-05"),
+    (8, 10000000,	4600,	"2019-09-13",   false, NULL, NULL, NULL),
+    (9, 45000,     130,	NULL,           false, NULL, NULL, NULL),
+    (10, 30000,	    60,		"2022-03-01",   false, 700, NULL, NULL);
 
 COMMIT;
