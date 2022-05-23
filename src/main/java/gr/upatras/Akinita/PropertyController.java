@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 @RestController
 public class PropertyController {
@@ -20,24 +22,20 @@ public class PropertyController {
     @RequestMapping(value = "/properties/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Property> getProperties() {
         log.info("Getting all properties");
-        final List<Property>[] properties = new List[]{null};
+        AtomicReference<List<Property>> properties = new AtomicReference<>();
 
-        DatabaseAccess.get("PROPERTY", (rs, primaryKeys) -> {
-            properties[0] = getPropertyList(rs, primaryKeys);
-        });
-        return properties[0];
+        DatabaseAccess.get("PROPERTY", (rs, primaryKeys) -> properties.set(getPropertyList(rs, primaryKeys)));
+        return properties.get();
     }
 
     @RequestMapping(value = "/properties/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Property> getProperty(@PathVariable("id") int id) {
         log.info("Getting property¨" + id);
-        final List<Property>[] properties = new List[]{null};
+        AtomicReference<List<Property>> properties = new AtomicReference<>();
 
-        DatabaseAccess.getById("PROPERTY", id, (rs, primaryKeys) -> {
-            properties[0] = getPropertyList(rs, primaryKeys);
-        });
+        DatabaseAccess.getById("PROPERTY", id, (rs, primaryKeys) -> properties.set(getPropertyList(rs, primaryKeys)));
 
-        return properties[0];
+        return properties.get();
     }
 
     @RequestMapping(value = "/properties/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
@@ -55,13 +53,11 @@ public class PropertyController {
 
     @RequestMapping(value = "/properties/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Property> searchProperty(@RequestBody Property property) {
-        final List<Property>[] properties = new List[]{null};
+        AtomicReference<List<Property>> properties = new AtomicReference<>();
         String query = DatabaseUtil.querySearchParamCreator(property);
         log.info(query);
-        DatabaseAccess.getCustom("PROPERTY", query, ((rs, primaryKeys) -> {
-            properties[0] = getPropertyList(rs, primaryKeys);
-        }));
-        return properties[0];
+        DatabaseAccess.getCustom("PROPERTY", query, ((rs, primaryKeys) -> properties.set(getPropertyList(rs, primaryKeys))));
+        return properties.get();
     }
 
     @RequestMapping(value = "/properties/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
@@ -77,11 +73,11 @@ public class PropertyController {
     @RequestMapping(value = "/properties/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
     ResponseEntity<Property> updateProperty(@RequestBody Property body, @PathVariable("id") int id) {
         Boolean[] res = {null};
-        final List<Property>[] fProperties = new List[]{null};
+        AtomicReference<List<Property>> fProperties = new AtomicReference<>();
 
         DatabaseAccess.getById("PROPERTY", id, ((rs, primaryKeys) -> {
             List<Property> properties = getPropertyList(rs, primaryKeys); // if entry exists
-            fProperties[0] = properties;
+            fProperties.set(properties);
             if (properties.isEmpty()) {
                 res[0] = false;
             } else {
@@ -90,16 +86,14 @@ public class PropertyController {
                 if (res[0]) {
                     int tempId = ((body.getId() == null) || (body.getId() == id) ? id : body.getId());
 
-                    DatabaseAccess.getById("PROPERTY", tempId, ((rs2, primaryKeys2) -> {
-                        fProperties[0] = getPropertyList(rs2, primaryKeys2);
-                    }));
+                    DatabaseAccess.getById("PROPERTY", tempId, ((rs2, primaryKeys2) -> fProperties.set(getPropertyList(rs2, primaryKeys2))));
                 }
             }
         }));
 
-        if (fProperties[0] != null) {
-            if (fProperties[0].size() > 0) {
-                return new ResponseEntity<>(fProperties[0].get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
+        if (fProperties.get() != null) {
+            if (fProperties.get().size() > 0) {
+                return new ResponseEntity<>(fProperties.get().get(0), ((res[0]) ? HttpStatus.OK : HttpStatus.BAD_REQUEST));
             } else {
                 return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
             }
@@ -108,13 +102,22 @@ public class PropertyController {
         }
     }
 
+
     private List<Property> getPropertyList(ResultSet rs, List<String> primaryKeys) {
         List<Property> properties = new ArrayList<>();
         try {
             while (rs.next()) {
-                Property newProperty = new Property(Integer.parseInt(rs.getString("Id")), Integer.parseInt(rs.getString("Listed_price")), Integer.parseInt(rs.getString("Tm")), Integer.parseInt(rs.getString("Type")), 
-                		Integer.parseInt("Road"), Integer.parseInt("Address_num"), Integer.parseInt("Floor"), 
-                		Boolean.parseBoolean("Availability"), Integer.parseInt("Owner_afm"), Integer.parseInt("Area_code"));
+                Property newProperty = new Property(
+                        Integer.parseInt(rs.getString("id")),
+                        Util.intResultOrNull(rs.getString("listed_price")),
+                        Util.intResultOrNull(rs.getString("tm")),
+                        rs.getString("type"),
+                        rs.getString("Road"),
+                        Util.intResultOrNull(rs.getString("Address_num")),
+                        Util.intResultOrNull(rs.getString("Floor")),
+                        Util.boolResultOrNull(rs.getString("Availability")),
+                        Util.intResultOrNull(rs.getString("owner_afm")),
+                        Util.intResultOrNull(rs.getString("area_code")));
                 properties.add(newProperty);
             }
         } catch (SQLException e) {

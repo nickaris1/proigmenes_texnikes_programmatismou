@@ -7,15 +7,15 @@ public class Property extends Entity {
 	private Integer id;
 	private Integer listedPrice;
 	private Integer tm;
-	private Integer type;
-	private Integer road;
+	private String type;
+	private String road;
 	private Integer addressNum;
 	private Integer floor;
 	private Boolean availability;
 	private Integer ownerAfm;
 	private Integer areaCode;
 
-	public Property(Integer id, Integer listedPrice, Integer tm, Integer type, Integer road, Integer addressNum, 
+	public Property(Integer id, Integer listedPrice, Integer tm, String type, String road, Integer addressNum,
 			Integer floor, Boolean availability, Integer ownerAfm, Integer areaCode) {
 		
 		this.setId(id);
@@ -66,19 +66,19 @@ public class Property extends Entity {
 		this.tm = tm;
 	}
 
-	public Integer getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
-	public Integer getRoad() {
+	public String getRoad() {
 		return road;
 	}
 
-	public void setRoad(Integer road) {
+	public void setRoad(String road) {
 		this.road = road;
 	}
 
