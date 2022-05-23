@@ -4,6 +4,7 @@ package gr.upatras.Database;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sqlite.SQLiteConfig;
 
 import java.io.File;
 import java.sql.*;
@@ -26,9 +27,11 @@ public class DatabaseAccess {
      * @throws SQLException throws sql Exception if file not found
      */
     public static void connect(final String fileName) throws SQLException {
+        SQLiteConfig config = new SQLiteConfig();
+        config.enforceForeignKeys(true);
         File file = new File(Objects.requireNonNull(DatabaseAccess.class.getClassLoader().getResource(fileName)).getFile());
         log.debug(file.getAbsolutePath());
-        connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
+        connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath(), config.toProperties());
     }
 
     /**

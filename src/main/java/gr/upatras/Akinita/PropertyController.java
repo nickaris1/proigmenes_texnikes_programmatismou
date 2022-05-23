@@ -39,7 +39,7 @@ public class PropertyController {
     }
 
     @RequestMapping(value = "/properties/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public ResponseEntity<Property> createLocation(@RequestBody Property property) {
+    public ResponseEntity<Property> createProperty(@RequestBody Property property) {
         log.info("Will add a new property");
         String q = DatabaseUtil.queryInsertParamCreator(property);
         boolean res = DatabaseAccess.addEntry("PROPERTY", q);

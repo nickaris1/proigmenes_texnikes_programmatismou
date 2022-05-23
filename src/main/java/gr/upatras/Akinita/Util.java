@@ -10,6 +10,10 @@ public class Util {
         }
     }
     public static Boolean boolResultOrNull(String result) {
-        return (!result.equals("null")) ? Boolean.parseBoolean(result) : null;
+        if(result == null || result.equals("null")) {
+            return null;
+        } else {
+            return Boolean.parseBoolean(result);
+        }
     }
 }
