@@ -114,7 +114,7 @@ public class SaleController {
                 		Util.intResultOrNull(rs.getString("Warranty")),
                 		rs.getString("StartDate"),
                 		rs.getString("EndDate"),
-                		Integer.parseInt(rs.getString("PropId")));
+                		Integer.parseInt(rs.getString("Property_id")));
                 sales.add(newSale);
             }
         } catch (SQLException e) {
