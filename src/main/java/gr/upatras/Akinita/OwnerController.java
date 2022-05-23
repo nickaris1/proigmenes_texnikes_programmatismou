@@ -73,6 +73,7 @@ public class OwnerController {
     ResponseEntity<Owner> updateOwner(@RequestBody Owner body, @PathVariable("id") int id) {
         Boolean[] res = {null};
         AtomicReference<List<Owner>> fOwners = new AtomicReference<>();
+        
         DatabaseAccess.getById("OWNER", id, ((rs, primaryKeys) -> {
             List<Owner> owners = getOwnerList(rs, primaryKeys); // if entry exists
             fOwners.set(owners);
@@ -100,12 +101,15 @@ public class OwnerController {
         }
     }
     
-    @SuppressWarnings("unused")
     private List<Owner> getOwnerList(ResultSet rs, List<String> primaryKeys) {
         List<Owner> owners = new ArrayList<>();
         try {
             while (rs.next()) {
-                Owner newOwner = new Owner(rs.getString("Fname"), rs.getString("Lname"), Integer.parseInt(rs.getString("Phone")), Integer.parseInt(rs.getString("AFM")));
+                Owner newOwner = new Owner(
+                		rs.getString("Fname"), 
+                		rs.getString("Lname"), 
+                		Integer.parseInt(rs.getString("AFM")),
+                		rs.getString("Phone"));
                 owners.add(newOwner);
             }
         } catch (SQLException e) {

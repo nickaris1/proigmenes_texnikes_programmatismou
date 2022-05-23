@@ -6,14 +6,14 @@ public class Owner extends Entity{
     private String FName;
     private String LName;
     private Integer afm;
-    private Integer phone;
+    private String phone;
 
 
-    public Owner(String FName, String LName, Integer afm, Integer phone) {
+    public Owner(String FName, String LName, Integer afm, String phone) {
         this.FName = FName;
         this.LName = LName;
         this.afm = afm;
-        this.phone = phone;
+        this.phone = String.format("%010d",Long.parseLong(phone));
         
         fieldsMap = new HashMap<>();
         fieldsMap.put("afm", "AFM");
@@ -46,11 +46,11 @@ public class Owner extends Entity{
         this.LName = LName;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 }
