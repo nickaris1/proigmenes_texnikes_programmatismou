@@ -81,7 +81,7 @@ public class SaleController {
                 res[0] = false;
             } else {
                 String query = DatabaseUtil.queryUpdateParamCreator(body);
-                res[0] = DatabaseAccess.updateEntry("Sale", id, query);
+                res[0] = DatabaseAccess.updateEntry("SALE", id, query);
                 if (res[0]) {
                 	int tempId = ((body.getID() == null) || (body.getID() == id) ? id : body.getID());
 
