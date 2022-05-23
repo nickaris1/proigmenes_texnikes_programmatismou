@@ -50,21 +50,12 @@ CREATE TABLE IF NOT EXISTS "SALE" (
     "warranty" integer DEFAULT NULL,
     "startdate" date DEFAULT NULL,
     "enddate" date DEFAULT NULL,
-    "goesForId" integer,
-    CONSTRAINT "SALE_GOES_FOR_FK" FOREIGN KEY("goesForId") REFERENCES "GOES_FOR"("id")	ON DELETE CASCADE		ON UPDATE CASCADE,
+
+    "property_id" integer NOT NULL,
+    CONSTRAINT "PROPERTY_FK" FOREIGN KEY("property_id") REFERENCES "PROPERTY"("id") ON DELETE CASCADE	ON UPDATE CASCADE,
+
     PRIMARY KEY("id")
 );
-
-
-DROP TABLE IF EXISTS "GOES_FOR";
-CREATE TABLE IF NOT EXISTS "GOES_FOR" (
-    "id" integer	NOT NULL,
-    "property_id" integer,
-    CONSTRAINT "GOES_FOR_PROPERTY_FK" FOREIGN KEY("property_id") REFERENCES "PROPERTY"("id") ON DELETE CASCADE	ON UPDATE CASCADE,
-    PRIMARY KEY("id")
-
-);
-
 
 ----
 INSERT INTO "LOCATION" ("Area_code", "City", "Area", "County") VALUES
@@ -96,46 +87,34 @@ INSERT INTO "OWNER" ("AFM", "Fname", "Lname", "Phone") VALUES
 
 ----
 INSERT INTO "PROPERTY" ("id", "listed_price", "tm", "type", "Road", "Address_num", "Floor", "Availability", "owner_afm", "area_code") VALUES
-    (000000, 125000,	104,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΜΑΡΚΟΥ ΜΠΟΤΣΑΡΗ",	   	23,		5,	TRUE, 0008, 17562), 	--sale apt
-    (000001, 103000,	81,		"ΔΙΑΜΕΡΙΣΜΑ",   "ΑΝΔΡΟΥ",				 7,		2,	TRUE, 0004, 54351), 	--sale apt
-    (000002, 5000,		550,	"ΒΙΛΑ",         "ΟΛΥΜΠΟΥ", 			   	15,	 NULL,	TRUE, 0004, 55534), 	--rent villa
-    (000003, 380,		32,		"ΓΚΑΡΣΟΝΙΕΡΑ",  "ΚΑΝΑΡΗ", 				 2,		0,	TRUE, 0000, 41222), 	--rent studio
-    (000004, 117000,	467,	"ΟΙΚΟΠΕΔΟ",     "ΑΓΙΩΝ ΠΑΝΤΩΝ", 	   	12,  NULL,	TRUE, 0003, 26224), 	--sale land
-    (000005, 35000,		139,	"ΟΙΚΟΠΕΔΟ",     "ΚΩΝΣΤΑΝΤΙΝΟΥΠΟΛΕΩΣ", 	 7,	 NULL,	TRUE, 0001, 15125), 	--sale land
-    (000006, 500,		62,		"ΓΡΑΦΕΙΟ",      "ΜΙΜΟΖΑΣ", 			   	38,		4,	TRUE, 0008, 26442), 	--rent office
-    (000007, 730,		90,		"ΔΙΑΜΕΡΙΣΜΑ",   "ΔΙΑΓΟΡΑ", 			     6,		2,	TRUE, 0009, 15127), 	--rent apt
-    (000008, 800,		280,	"ΚΑΤΑΣΤΗΜΑ",    "ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ", 	   	11,		0,	TRUE, 0002, 15451), 	--rent store
-    (000009, 230000,	275,	"ΜΟΝΟΚΑΤΟΙΚΙΑ", "ΜΙΛΤΙΑΔΟΥ", 			21,  NULL,	TRUE, 0003, 41222), 	--sale house
-    (000010, 2000,		350,	"ΓΡΑΦΕΙΟ",      "ΑΜΕΡΙΚΗΣ",				 1,		1,	TRUE, 0007, 41222), 	--rent office
-    (000011, 32000,		200,	"ΟΙΚΟΠΕΔΟ",     "ΑΧΑΡΝΩΝ", 			   132,	 NULL,	TRUE, 0009, 17561), 	--sale land
-    (000012, 100000,	60,		"ΓΡΑΦΕΙΟ",      "ΑΓΙΑΣ ΕΙΡΗΝΗΣ", 		 6,		2,	TRUE, 0007, 41222), 	--sale office
-    (000013, 10000000,	4600,	"ΞΕΝΟΔΟΧΕΙΟ",   "ΚΟΛΟΚΟΤΡΩΝΗ", 			49,	 NULL,	TRUE, 0005, 26221), 	--sale hotel
-    (000014, 450000,	130,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΠΟΝΤΟΥ", 				12,		3,	TRUE, 0001, 15127); 	--sale apt
-
-
-----
-INSERT INTO "GOES_FOR" ("id", "property_id") VALUES
-    (1000000, 000000),
-    (1000001, 000001),
-    (1000002, 000004),
-    (1000003, 000005),
-    (1000004, 000009),
-    (1000005, 000011),
-    (1000006, 000012),
-    (1000007, 000013),
-    (1000008, 000014);
+    (0, 125000,	104,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΜΑΡΚΟΥ ΜΠΟΤΣΑΡΗ",	   	23,		5,	TRUE, 0008, 17562), 	--sale apt
+    (1, 103000,	81,		"ΔΙΑΜΕΡΙΣΜΑ",   "ΑΝΔΡΟΥ",				 7,		2,	TRUE, 0004, 54351), 	--sale apt
+    (2, 5000,		550,	"ΒΙΛΑ",         "ΟΛΥΜΠΟΥ", 			   	15,	 NULL,	TRUE, 0004, 55534), 	--rent villa
+    (3, 380,		32,		"ΓΚΑΡΣΟΝΙΕΡΑ",  "ΚΑΝΑΡΗ", 				 2,		0,	TRUE, 0000, 41222), 	--rent studio
+    (4, 117000,	467,	"ΟΙΚΟΠΕΔΟ",     "ΑΓΙΩΝ ΠΑΝΤΩΝ", 	   	12,  NULL,	TRUE, 0003, 26224), 	--sale land
+    (5, 35000,		139,	"ΟΙΚΟΠΕΔΟ",     "ΚΩΝΣΤΑΝΤΙΝΟΥΠΟΛΕΩΣ", 	 7,	 NULL,	TRUE, 0001, 15125), 	--sale land
+    (6, 500,		62,		"ΓΡΑΦΕΙΟ",      "ΜΙΜΟΖΑΣ", 			   	38,		4,	TRUE, 0008, 26442), 	--rent office
+    (7, 730,		90,		"ΔΙΑΜΕΡΙΣΜΑ",   "ΔΙΑΓΟΡΑ", 			     6,		2,	TRUE, 0009, 15127), 	--rent apt
+    (8, 800,		280,	"ΚΑΤΑΣΤΗΜΑ",    "ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ", 	   	11,		0,	TRUE, 0002, 15451), 	--rent store
+    (9, 230000,	275,	"ΜΟΝΟΚΑΤΟΙΚΙΑ", "ΜΙΛΤΙΑΔΟΥ", 			21,  NULL,	TRUE, 0003, 41222), 	--sale house
+    (10, 2000,		350,	"ΓΡΑΦΕΙΟ",      "ΑΜΕΡΙΚΗΣ",				 1,		1,	TRUE, 0007, 41222), 	--rent office
+    (11, 32000,		200,	"ΟΙΚΟΠΕΔΟ",     "ΑΧΑΡΝΩΝ", 			   132,	 NULL,	TRUE, 0009, 17561), 	--sale land
+    (12, 100000,	60,		"ΓΡΑΦΕΙΟ",      "ΑΓΙΑΣ ΕΙΡΗΝΗΣ", 		 6,		2,	TRUE, 0007, 41222), 	--sale office
+    (13, 10000000,	4600,	"ΞΕΝΟΔΟΧΕΙΟ",   "ΚΟΛΟΚΟΤΡΩΝΗ", 			49,	 NULL,	TRUE, 0005, 26221), 	--sale hotel
+    (14, 450000,	130,	"ΔΙΑΜΕΡΙΣΜΑ",   "ΠΟΝΤΟΥ", 				12,		3,	TRUE, 0001, 15127); 	--sale apt
 
 ----
 
-INSERT INTO "SALE" ("price", "tm", "date", "rental", "warranty", "startdate", "enddate") VALUES
-    (125000,	104,	NULL,           false, NULL, NULL, NULL),
-    (103000,	81,		NULL,           false, NULL, NULL, NULL),
-    (117000,	467,	"2021-03-23",   false, NULL, NULL, NULL),
-    (35000,     139,	NULL,           false, NULL, NULL, NULL),
-    (230000,	275,	"2021-11-13",   false, NULL, NULL, NULL),
-    (32000,     200,	NULL,           false, NULL, NULL, NULL),
-    (700,	    60,		"2021-02-05",   true, 700, "2021-02-05", "2022-02-05"),
-    (10000000,	4600,	"2019-09-13",   false, NULL, NULL, NULL),
-    (45000,     130,	NULL,           false, NULL, NULL, NULL);
+INSERT INTO "SALE" ("id", "price", "tm", "date", "rental", "warranty", "startdate", "enddate", property_id) VALUES
+    (1, 125000,	104,	NULL,           false, NULL, NULL, NULL, 1),
+    (2, 103000,	81,		NULL,           false, NULL, NULL, NULL, 2),
+    (3, 117000,	467,	"2021-03-23",   false, NULL, NULL, NULL, 3),
+    (4, 35000,     139,	NULL,           false, NULL, NULL, NULL, 4),
+    (5, 230000,	275,	"2021-11-13",   false, NULL, NULL, NULL, 5),
+    (6, 32000,     200,	NULL,           false, NULL, NULL, NULL, 6),
+    (7, 700,	    60,		"2021-02-05",   true, 700, "2021-02-05", "2022-02-05", 7),
+    (8, 10000000,	4600,	"2019-09-13",   false, NULL, NULL, NULL, 8),
+    (9, 45000,     130,	NULL,           false, NULL, NULL, NULL, 9),
+    (10, 30000,	    60,		"2022-03-01",   false, 700, NULL, NULL, 7);
 
 COMMIT;

@@ -1,22 +1,34 @@
 package gr.upatras.Akinita;
 
-public class Owner {
+import java.util.HashMap;
+
+public class Owner extends Entity{
     private String FName;
     private String LName;
-    private int AFM;
-    private String address;
-    private int phone;
+    private Integer afm;
+    private String phone;
 
-    public Owner() {}
 
-    public Owner(String FName, String LName, int AFM, String address, int phone) {
+    public Owner(String FName, String LName, Integer afm, String phone) {
         this.FName = FName;
         this.LName = LName;
-        this.AFM = AFM;
-        this.address = address;
-        this.phone = phone;
+        this.afm = afm;
+        this.phone = String.format("%010d",Long.parseLong(phone));
+        
+        fieldsMap = new HashMap<>();
+        fieldsMap.put("afm", "AFM");
+        fieldsMap.put("FName", "Fname");
+        fieldsMap.put("LName", "Lname");
+        fieldsMap.put("phone", "Phone");
+    }
+    
+    public Integer getAFM() {
+        return afm;
     }
 
+    public void setAFM(Integer afm) {
+        this.afm = afm;
+    }
 
     public String getFName() {
         return FName;
@@ -34,27 +46,12 @@ public class Owner {
         this.LName = LName;
     }
 
-    public int getAFM() {
-        return AFM;
-    }
-
-    public void setAFM(int AFM) {
-        this.AFM = AFM;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 }
+
