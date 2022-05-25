@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>gr.upatras</groupId>
 	<artifactId>Akinita</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Akinita</name>
 	<description>Project gia akinita</description>
 
@@ -91,6 +91,14 @@
 			<type>maven-plugin</type>
 		</dependency>
 
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		
 	</dependencies>
 
 

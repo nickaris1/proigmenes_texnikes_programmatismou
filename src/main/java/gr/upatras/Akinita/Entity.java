@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Map;
 
 public class Entity {
-    public Map<String, String> fieldsMap;
+    @JsonIgnore
+    public transient Map<String, String> fieldsMap;
 
     @JsonIgnore
     public Map<String, String> getFieldsMap() {
