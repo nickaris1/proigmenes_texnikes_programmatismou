@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static gr.upatras.Akinita.Location.createLocationFromResultSet;
+
 @RestController
 public class LocationController {
     private static final Logger log = LoggerFactory.getLogger(LocationController.class);
@@ -105,7 +107,7 @@ public class LocationController {
         List<Location> locations = new ArrayList<>();
         try {
             while (rs.next()) {
-                Location newLocation = new Location(rs.getString("City"), rs.getString("Area"), rs.getString("County"), Integer.parseInt(rs.getString("Area_code")));
+                Location newLocation = createLocationFromResultSet(rs);
                 locations.add(newLocation);
             }
         } catch (SQLException e) {

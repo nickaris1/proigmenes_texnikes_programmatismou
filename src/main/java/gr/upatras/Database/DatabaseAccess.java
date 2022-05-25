@@ -305,6 +305,47 @@ public class DatabaseAccess {
         return primaryKeysArray;
     }
 
+
+    /**
+     * Run Custom Query
+     *
+     * @param query  Query to execute
+     */
+    public static Boolean runCustomQuery(String query, DatabaseAccessCallback callback) {
+        return runCustomQuery(SQLiteFILENAME, query, callback);
+    }
+
+    /**
+     * Run Custom Query
+     *
+     * @param fileName  Filename for the database (we can use custom database for unit test)
+     * @param query  Query to execute
+     */
+    public static Boolean runCustomQuery(String fileName, String query, DatabaseAccessCallback callback) {
+        try {
+            connect(fileName);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+            List<String> pk = new ArrayList<>();
+
+            log.info(query);
+            ResultSet rs = statement.executeQuery(query);
+            callback.run(rs, pk);
+
+            if (connection != null) connection.close();
+            return true;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                // connection close failed.
+                log.error(e.getMessage());
+            }
+        }
+        return false;
+    }
     public DatabaseAccess() {
     }
 }

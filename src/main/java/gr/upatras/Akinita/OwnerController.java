@@ -105,11 +105,7 @@ public class OwnerController {
         List<Owner> owners = new ArrayList<>();
         try {
             while (rs.next()) {
-                Owner newOwner = new Owner(
-                		rs.getString("Fname"), 
-                		rs.getString("Lname"), 
-                		Integer.parseInt(rs.getString("AFM")),
-                		rs.getString("Phone"));
+                Owner newOwner = Owner.createOwnerFromResultSet(rs);
                 owners.add(newOwner);
             }
         } catch (SQLException e) {
