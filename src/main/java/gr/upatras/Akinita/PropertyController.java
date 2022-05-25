@@ -107,17 +107,7 @@ public class PropertyController {
         List<Property> properties = new ArrayList<>();
         try {
             while (rs.next()) {
-                Property newProperty = new Property(
-                        Integer.parseInt(rs.getString("id")),
-                        Util.intResultOrNull(rs.getString("listed_price")),
-                        Util.intResultOrNull(rs.getString("tm")),
-                        rs.getString("type"),
-                        rs.getString("Road"),
-                        Util.intResultOrNull(rs.getString("Address_num")),
-                        Util.intResultOrNull(rs.getString("Floor")),
-                        Util.boolResultOrNull(rs.getString("Availability")),
-                        Util.intResultOrNull(rs.getString("owner_afm")),
-                        Util.intResultOrNull(rs.getString("area_code")));
+                Property newProperty = Property.createPropertyFromResultSet(rs);
                 properties.add(newProperty);
             }
         } catch (SQLException e) {

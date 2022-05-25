@@ -1,5 +1,7 @@
 package gr.upatras.Akinita;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
@@ -58,5 +60,10 @@ public class Location extends Entity {
 
     public void setPostCode(Integer postCode) {
         this.postCode = postCode;
+    }
+
+
+    public static Location createLocationFromResultSet(ResultSet rs) throws SQLException {
+        return new Location(rs.getString("City"), rs.getString("Area"), rs.getString("County"), Integer.parseInt(rs.getString("Area_code")));
     }
 }

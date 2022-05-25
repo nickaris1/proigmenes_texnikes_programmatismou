@@ -83,7 +83,7 @@ public class SaleController {
                 String query = DatabaseUtil.queryUpdateParamCreator(body);
                 res[0] = DatabaseAccess.updateEntry("SALE", id, query);
                 if (res[0]) {
-                	int tempId = ((body.getID() == null) || (body.getID() == id) ? id : body.getID());
+                	int tempId = ((body.getSaleID() == null) || (body.getSaleID() == id) ? id : body.getSaleID());
 
                     DatabaseAccess.getById("SALE", tempId, ((rs2, primaryKeys2) -> fSales.set(getSaleList(rs2, primaryKeys2))));
                 }
@@ -105,16 +105,7 @@ public class SaleController {
         List<Sale> sales = new ArrayList<>();
         try {
             while (rs.next()) {
-                Sale newSale = new Sale(
-                		Integer.parseInt(rs.getString("ID")),
-                		rs.getString("Date"),
-                		rs.getString("Price"),
-                		rs.getString("TM"),
-                		Util.boolResultOrNull(rs.getString("Rental")),
-                		Util.intResultOrNull(rs.getString("Warranty")),
-                		rs.getString("StartDate"),
-                		rs.getString("EndDate"),
-                		Integer.parseInt(rs.getString("Property_id")));
+                Sale newSale = Sale.createSaleFromResultSet(rs);
                 sales.add(newSale);
             }
         } catch (SQLException e) {

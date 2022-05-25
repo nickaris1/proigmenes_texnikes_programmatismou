@@ -1,9 +1,11 @@
 package gr.upatras.Akinita;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Sale extends Entity{
-	private Integer ID;
+	private Integer saleID;
 	private String Date;
 	private String Price;
 	private String TM;
@@ -13,9 +15,9 @@ public class Sale extends Entity{
 	private String EndDate;
 	private Integer PropId;
 	
-	public Sale(Integer ID, String Date, String Price, String TM,Boolean Rental, Integer Warranty,
-			String StartDate, String EndDate, Integer PropId) {
-		this.ID = ID;
+	public Sale(Integer saleID, String Date, String Price, String TM, Boolean Rental, Integer Warranty,
+				String StartDate, String EndDate, Integer PropId) {
+		this.saleID = saleID;
 		this.Date = Date;
 		this.Price = Price;
 		this.TM = TM;
@@ -26,7 +28,7 @@ public class Sale extends Entity{
 		this.PropId = PropId;
 		
 		fieldsMap = new HashMap<>();
-		fieldsMap.put("ID", "id");
+		fieldsMap.put("saleID", "id");
 		fieldsMap.put("Date", "date");
 		fieldsMap.put("Price", "price");
 		fieldsMap.put("TM", "tm");
@@ -38,12 +40,12 @@ public class Sale extends Entity{
 		
 	}
 	
-	public Integer getID() {
-		return ID;
+	public Integer getSaleID() {
+		return saleID;
 	}
 	
-	public void setID(Integer ID) {
-		this.ID = ID;
+	public void setSaleID(Integer saleID) {
+		this.saleID = saleID;
 	}
 	
 	public String getDate() {
@@ -103,6 +105,21 @@ public class Sale extends Entity{
 	public void setPropId(Integer PropId) {
 		this.PropId = PropId;
 	}
+
+
+	public static Sale createSaleFromResultSet(ResultSet rs) throws SQLException {
+		return new Sale(
+				Integer.parseInt(rs.getString("ID")),
+				rs.getString("Date"),
+				rs.getString("Price"),
+				rs.getString("TM"),
+				Util.boolResultOrNull(rs.getString("Rental")),
+				Util.intResultOrNull(rs.getString("Warranty")),
+				rs.getString("StartDate"),
+				rs.getString("EndDate"),
+				Integer.parseInt(rs.getString("Property_id")));
+	}
+
 }
 
 

@@ -1,5 +1,7 @@
 package gr.upatras.Akinita;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Owner extends Entity{
@@ -52,6 +54,15 @@ public class Owner extends Entity{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+
+    public static Owner createOwnerFromResultSet(ResultSet rs) throws SQLException {
+        return new Owner(
+                rs.getString("Fname"),
+                rs.getString("Lname"),
+                Integer.parseInt(rs.getString("AFM")),
+                rs.getString("Phone"));
     }
 }
 
