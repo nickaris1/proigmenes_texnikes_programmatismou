@@ -25,8 +25,7 @@ public class CustomSearchController {
 
     /**
      * HTTP post function to add a property location
-     * @param search
-     * @return
+     * @param search json Search object
      */
     @RequestMapping(value = "/search/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<List<CustomSearch>> createLocation(@RequestBody CustomSearch search) {
@@ -41,10 +40,10 @@ public class CustomSearchController {
     }
 
     /**
-     * 
-     * @param rs
-     * @param primaryKeys
-     * @return
+     * Create CustomSearch List from database ResultSet
+     * @param rs the resultSet from database
+     * @param primaryKeys the resultSet from database
+     * @return return List&lt;CustomSearch&gt;
      */
     @SuppressWarnings("unused")
     private List<CustomSearch> getSearchList(ResultSet rs, List<String> primaryKeys) {
@@ -80,10 +79,10 @@ public class CustomSearchController {
     }
 
     /**
-     * 
-     * @param rs
-     * @param fieldName
-     * @return
+     * Get string from ResultSet(fieldname) if it exist else return null
+     * @param rs Resultset
+     * @param fieldName fieldname
+     * @return String
      */
     private String getFieldOrNull(ResultSet rs, String fieldName) {
         try {

@@ -11,7 +11,6 @@ public class Location extends Entity {
     private Integer postCode;
 
 
-//    public Location() {}
 
     /**
      * Constructor method for Location class
@@ -35,7 +34,6 @@ public class Location extends Entity {
 
     /**
      * Getter function for city param
-     * @return
      */
     public String getCity() {
         return city;
@@ -59,7 +57,6 @@ public class Location extends Entity {
 
     /**
      * Setter function for area param
-     * @param area
      */
     public void setArea(String area) {
         this.area = area;
@@ -67,7 +64,6 @@ public class Location extends Entity {
 
     /**
      * Getter function for country param
-     * @return
      */
     public String getCounty() {
         return county;
@@ -75,7 +71,6 @@ public class Location extends Entity {
 
     /**
      * Getter function for country param
-     * @param county
      */
     public void setCounty(String county) {
         this.county = county;
@@ -91,18 +86,18 @@ public class Location extends Entity {
 
     /**
      * Getter function for postCode param
-     * @param postCode
+     * @param postCode Integer
      */
     public void setPostCode(Integer postCode) {
         this.postCode = postCode;
     }
 
     /**
-     * Creates a location from a given ResultSet param
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
+	 * Create Location Object from database
+	 * @param rs ResultSet from database
+	 * @return Location object create from database query
+	 * @throws SQLException
+	 */
     public static Location createLocationFromResultSet(ResultSet rs) throws SQLException {
         return new Location(rs.getString("City"), rs.getString("Area"), rs.getString("County"), Integer.parseInt(rs.getString("Area_code")));
     }

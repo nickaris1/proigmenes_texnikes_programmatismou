@@ -22,7 +22,6 @@ public class LocationController {
 
     /**
      * HTTP get function to find all locations
-     * @return
      */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocations() {
@@ -35,8 +34,7 @@ public class LocationController {
 
     /**
      * HTTP get function to find a specific location through its id
-     * @param id
-     * @return
+     * @param id of location
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocation(@PathVariable("id") int id) {
@@ -50,8 +48,7 @@ public class LocationController {
 
     /**
      * HTTP post function to add a new location
-     * @param location
-     * @return
+     * @param location body json Location to add new location
      */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
@@ -68,8 +65,7 @@ public class LocationController {
 
     /**
      * 
-     * @param location
-     * @return
+     * @param location object in
      */
     @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Location> searchLocation(@RequestBody Location location) {
@@ -82,8 +78,7 @@ public class LocationController {
 
     /**
      * HTTP delete function to delete a specific location through its id
-     * @param id
-     * @return
+     * @param id id of Location to delete
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteLocationById(@PathVariable("id") int id) {
@@ -97,9 +92,8 @@ public class LocationController {
 
     /**
      * HTTP patch function to update the location params
-     * @param body
-     * @param id
-     * @return
+     * @param body json Location to update values
+     * @param id id of location to update
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
     ResponseEntity<Location> updateLocation(@RequestBody Location body, @PathVariable("id") int id) {
@@ -133,10 +127,10 @@ public class LocationController {
     }
 
     /**
-     * Return a list with every location
-     * @param rs
-     * @param primaryKeys
-     * @return
+     * Create Location List from database ResultSet
+     * @param rs the resultSet from database
+     * @param primaryKeys the resultSet from database
+     * @return return List&lt;Location&gt;
      */
     @SuppressWarnings("unused")
     private List<Location> getLocationList(ResultSet rs, List<String> primaryKeys) {
