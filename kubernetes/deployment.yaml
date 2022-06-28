@@ -1,0 +1,28 @@
+apiVersion: apps/v1   
+kind: Deployment
+metadata:
+  name: akinita
+spec:
+  selector:
+    matchLabels:
+      app: akinita
+  replicas: 2
+
+  template:
+    metadata:
+      labels:
+        app: akinita
+    spec:
+      containers:
+      - image: up1066471/proigmenes_texnikes_programatismou
+        name: akinita
+        ports:
+        - containerPort: 8888
+        volumeMounts:
+        - mountPath: "/opt/akinita/database"
+          name: task-pv-storage
+      volumes:
+      - name: task-pv-storage
+        persistentVolumeClaim:
+          claimName: task-pv-claim
+    
