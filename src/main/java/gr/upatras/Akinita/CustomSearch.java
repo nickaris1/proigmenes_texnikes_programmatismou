@@ -2,8 +2,26 @@ package gr.upatras.Akinita;
 
 import java.util.HashMap;
 
-public class CustomSearch extends Entity{
+/**
+* Custom search entity.
+*/
 
+public class CustomSearch extends Entity{
+	private Location location;
+    private Owner owner;
+    private Property property;
+    private Sale sale;
+    private Modifiers modifiers;
+
+
+	/**
+	 * Constructor method for CustomSearch class
+	 * @param location		location of the property
+	 * @param owner			owner of the property
+	 * @param property		property
+	 * @param sale			sale object
+	 * @param modifiers     modifiers object
+	 */
     public CustomSearch(Location location, Owner owner, Property property, Sale sale, Modifiers modifiers) {
         this.location = location;
         this.owner = owner;
@@ -23,6 +41,7 @@ public class CustomSearch extends Entity{
         this.fieldsMap.put("sale", "SALE as s");
 
     }
+    
 
     public Location getLocation() {
         return location;
@@ -56,10 +75,8 @@ public class CustomSearch extends Entity{
         this.sale = sale;
     }
 
-    private Location location;
-    private Owner owner;
-    private Property property;
-    private Sale sale;
+    
+
 
     public Modifiers getModifiers() {
         return modifiers;
@@ -69,5 +86,4 @@ public class CustomSearch extends Entity{
         this.modifiers = modifiers;
     }
 
-    private Modifiers modifiers;
 }

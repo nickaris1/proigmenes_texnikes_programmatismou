@@ -6,6 +6,15 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+
+/**
+* Class that have a string variable for each variable of Location, Property, Owner, Sale
+* <br>
+* the string value by default is =
+* <br>
+* it can be set to &lt; or &gt;
+*/
+
 public class Modifiers extends Entity{
     private static final Logger log = LoggerFactory.getLogger(Modifiers.class);
     private String locationPostCode;

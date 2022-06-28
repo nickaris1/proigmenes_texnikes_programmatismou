@@ -18,6 +18,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OwnerController {
 	private static final Logger log = LoggerFactory.getLogger(OwnerController.class);
 	
+	/**
+	 * HTTP get function to find all owners
+	 * @return
+	 */
     @RequestMapping(value = "/owners/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Owner> getOwners() {
         log.info("Getting all owners");
@@ -27,6 +31,11 @@ public class OwnerController {
         return owners.get();
     }
 
+    /** 
+     * HTTP get function to find a specific owner through his id
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Owner> getOwner(@PathVariable("id") int id) {
         log.info("Getting Owner¨" + id);
@@ -37,6 +46,11 @@ public class OwnerController {
         return owners.get();
     }
     
+    /**
+     * HTTP post function to add a new owner
+     * @param owner
+     * @return
+     */
     @RequestMapping(value = "/owners/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) {
         log.info("Will add a new owner");
@@ -50,6 +64,11 @@ public class OwnerController {
         }
     }
     
+    /**
+     * 
+     * @param owner
+     * @return
+     */
     @RequestMapping(value = "/owners/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Owner> searchOwner(@RequestBody Owner owner) {
         AtomicReference<List<Owner>> owners = new AtomicReference<>();
@@ -59,6 +78,11 @@ public class OwnerController {
         return owners.get();
     }
 
+    /**
+     * HTTP delete function to delete a specific owner through his id
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteOwnerById(@PathVariable("id") int id) {
         boolean res = DatabaseAccess.deleteEntry("OWNER", id);
@@ -69,6 +93,12 @@ public class OwnerController {
         }
     }
     
+    /**
+     * HTTP patch function to update the owner params
+     * @param body
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
     ResponseEntity<Owner> updateOwner(@RequestBody Owner body, @PathVariable("id") int id) {
         Boolean[] res = {null};
@@ -101,6 +131,12 @@ public class OwnerController {
         }
     }
     
+    /**
+     * Return a list with every owner
+     * @param rs
+     * @param primaryKeys
+     * @return
+     */
     private List<Owner> getOwnerList(ResultSet rs, List<String> primaryKeys) {
         List<Owner> owners = new ArrayList<>();
         try {

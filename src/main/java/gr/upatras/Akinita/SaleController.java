@@ -100,7 +100,13 @@ public class SaleController {
             return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
-    
+
+    /**
+     * Create Sales List from database ResultSet
+     * @param rs the resultSet from database
+     * @param primaryKeys the resultSet from database
+     * @return return List&lt;Sale&gt;
+     */
     private List<Sale> getSaleList(ResultSet rs, List<String> primaryKeys) {
         List<Sale> sales = new ArrayList<>();
         try {

@@ -102,7 +102,12 @@ public class PropertyController {
         }
     }
 
-
+    /**
+     * Create Property List from database ResultSet
+     * @param rs the resultSet from database
+     * @param primaryKeys the resultSet from database
+     * @return return List&lt;Property&gt;
+     */
     private List<Property> getPropertyList(ResultSet rs, List<String> primaryKeys) {
         List<Property> properties = new ArrayList<>();
         try {

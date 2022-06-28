@@ -1,5 +1,8 @@
 package gr.upatras.Akinita;
 
+/**
+    Utility class to change logging level
+ */
 public class Logging {
 
     public static void setLoggingLevel(ch.qos.logback.classic.Level level) {
