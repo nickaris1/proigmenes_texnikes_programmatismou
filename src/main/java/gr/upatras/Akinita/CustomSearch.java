@@ -71,6 +71,7 @@ public class CustomSearch extends Entity{
         return sale;
     }
 
+
     public void setSale(Sale sale) {
         this.sale = sale;
     }
