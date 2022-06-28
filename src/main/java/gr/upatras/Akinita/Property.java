@@ -17,6 +17,19 @@ public class Property extends Entity {
 	private Integer ownerAfm;
 	private Integer areaCode;
 
+	/**
+	 * Constructor method for Property class
+	 * @param id			Property's id
+	 * @param listedPrice	Property's price
+	 * @param tm			Property's size in tm
+	 * @param type			Property's type
+	 * @param road			Property's road
+	 * @param addressNum	Property's address
+	 * @param floor			Property's floor
+	 * @param availability	If property is available
+	 * @param ownerAfm		Property's owner's afm
+	 * @param areaCode		Property's code
+	 */
 	public Property(Integer id, Integer listedPrice, Integer tm, String type, String road, Integer addressNum,
 			Integer floor, Boolean availability, Integer ownerAfm, Integer areaCode) {
 		

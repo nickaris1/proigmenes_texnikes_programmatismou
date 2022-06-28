@@ -23,6 +23,11 @@ public class CustomSearchController {
 
     private static final Logger log = LoggerFactory.getLogger(CustomSearchController.class);
 
+    /**
+     * HTTP post function to add a property location
+     * @param search
+     * @return
+     */
     @RequestMapping(value = "/search/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<List<CustomSearch>> createLocation(@RequestBody CustomSearch search) {
         AtomicReference<List<CustomSearch>> searchRes = new AtomicReference<>();
@@ -35,6 +40,12 @@ public class CustomSearchController {
         return new ResponseEntity<>(searchRes.get(), (ret)? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * 
+     * @param rs
+     * @param primaryKeys
+     * @return
+     */
     @SuppressWarnings("unused")
     private List<CustomSearch> getSearchList(ResultSet rs, List<String> primaryKeys) {
         List<CustomSearch> search = new ArrayList<>();
@@ -68,6 +79,12 @@ public class CustomSearchController {
         return search;
     }
 
+    /**
+     * 
+     * @param rs
+     * @param fieldName
+     * @return
+     */
     private String getFieldOrNull(ResultSet rs, String fieldName) {
         try {
             return rs.getString(fieldName);

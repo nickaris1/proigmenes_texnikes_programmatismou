@@ -20,6 +20,10 @@ import static gr.upatras.Akinita.Location.createLocationFromResultSet;
 public class LocationController {
     private static final Logger log = LoggerFactory.getLogger(LocationController.class);
 
+    /**
+     * HTTP get function to find all locations
+     * @return
+     */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocations() {
         log.info("Getting all locations");
@@ -29,6 +33,11 @@ public class LocationController {
         return locations.get();
     }
 
+    /**
+     * HTTP get function to find a specific location through its id
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
     public List<Location> getLocation(@PathVariable("id") int id) {
         log.info("Getting Location¨" + id);
@@ -39,6 +48,11 @@ public class LocationController {
         return locations.get();
     }
 
+    /**
+     * HTTP post function to add a new location
+     * @param location
+     * @return
+     */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public ResponseEntity<Location> createLocation(@RequestBody Location location) {
         log.info("Will add a new location");
@@ -52,6 +66,11 @@ public class LocationController {
         }
     }
 
+    /**
+     * 
+     * @param location
+     * @return
+     */
     @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
     public List<Location> searchLocation(@RequestBody Location location) {
         AtomicReference<List<Location>> locations = new AtomicReference<>();
@@ -61,6 +80,11 @@ public class LocationController {
         return locations.get();
     }
 
+    /**
+     * HTTP delete function to delete a specific location through its id
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteLocationById(@PathVariable("id") int id) {
         boolean res = DatabaseAccess.deleteEntry("LOCATION", id);
@@ -71,6 +95,12 @@ public class LocationController {
         }
     }
 
+    /**
+     * HTTP patch function to update the location params
+     * @param body
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
     ResponseEntity<Location> updateLocation(@RequestBody Location body, @PathVariable("id") int id) {
         Boolean[] res = {null};
@@ -102,6 +132,12 @@ public class LocationController {
         }
     }
 
+    /**
+     * Return a list with every location
+     * @param rs
+     * @param primaryKeys
+     * @return
+     */
     @SuppressWarnings("unused")
     private List<Location> getLocationList(ResultSet rs, List<String> primaryKeys) {
         List<Location> locations = new ArrayList<>();
