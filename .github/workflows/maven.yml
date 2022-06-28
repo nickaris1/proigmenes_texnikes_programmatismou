@@ -61,12 +61,12 @@ jobs:
       uses: marvinpinto/action-automatic-releases@v1.2.1
       with:
         # GitHub secret token
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        repo_token: "${{ secrets.PAT }}"
         # Git tag (for automatic releases)
         automatic_release_tag: "v${{steps.get_version.outputs.version}}.${{github.run_number}}"
 
         # Should this release be marked as a pre-release?
-        prerelease: true # optional, default is true
+        prerelease: false # optional, default is true
         # Release title (for automatic releases)
         title: "Release ${{steps.get_version.outputs.version}}.${{github.run_number}}" # optional
         # Assets to upload to the release
