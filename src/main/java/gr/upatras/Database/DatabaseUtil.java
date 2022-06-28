@@ -149,7 +149,20 @@ public class DatabaseUtil {
         return queryStr.substring(0, queryStr.length() - 2);
     }
 
-
+    /**
+     * Create custom search query from an CustomSearch object which may have populated any property of the objects: <br>
+     * <ul>
+     *     <li>Location</li>
+     *     <li>Sale</li>
+     *     <li>Owner</li>
+     *     <li>Modifiers</li>
+     *     <li>Property</li>
+     *     <li>Sale</li>
+     * </ul>
+     *
+     * @param cs CustomSearch Object
+     * @return query created from custom search object.
+     */
     public static String searchQuery(CustomSearch cs) {
         StringJoiner query = new StringJoiner("");
         query.add("SELECT * from ");

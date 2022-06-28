@@ -107,6 +107,12 @@ public class Sale extends Entity{
 	}
 
 
+	/**
+	 * Create Sale Object from database
+	 * @param rs ResultSet from database
+	 * @return Sale object create from database query
+	 * @throws SQLException
+	 */
 	public static Sale createSaleFromResultSet(ResultSet rs) throws SQLException {
 		return new Sale(
 				Integer.parseInt(rs.getString("ID")),
