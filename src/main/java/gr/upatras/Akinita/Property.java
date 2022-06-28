@@ -137,6 +137,13 @@ public class Property extends Entity {
 		this.areaCode = areaCode;
 	}
 
+
+	/**
+	 * Create Property Object from database
+	 * @param rs ResultSet from database
+	 * @return Property object create from database query
+	 * @throws SQLException
+	 */
 	public static Property createPropertyFromResultSet(ResultSet rs) throws SQLException {
 		return new Property(
 				Integer.parseInt(rs.getString("id")),

@@ -15,6 +15,8 @@ import java.util.Objects;
 
 /**
  * @author issaris nikolaos
+ *
+ * Class to get access to the database
  */
 public class DatabaseAccess {
     private static final String SQLiteFILENAME = "database/database.db"; // relative path from resources

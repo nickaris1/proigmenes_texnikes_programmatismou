@@ -5,6 +5,9 @@ import java.util.List;
 
 
 /**
+ * Callback interface for database.
+ * <br>
+ *
  * @author issaris nikolaos
  */
 public interface DatabaseAccessCallback {
