@@ -5,29 +5,31 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Owner extends Entity{
-    private String FName;
-    private String LName;
     private Integer afm;
+    private String fName;
+    private String lName;
     private String phone;
 
     /**
      * Constructor method for Owner class
-     * @param FName		Owner's first name
-     * @param LName		Owner's last name
+     * @param fName		Owner's first name
+     * @param lName		Owner's last name
      * @param afm		Owner's afm
      * @param phone		Owner's phone number
      */
-    public Owner(String FName, String LName, Integer afm, String phone) {
-        this.FName = FName;
-        this.LName = LName;
+    public Owner(Integer afm, String fName, String lName, String phone) {
         this.afm = afm;
-        this.phone = String.format("%010d",Long.parseLong(phone));
+        this.fName = fName;
+        this.lName = lName;
+        if (phone == null)
+        	this.phone = phone;
+        else this.phone = String.format("%010d",Long.parseLong(phone));
         
         fieldsMap = new HashMap<>();
-        fieldsMap.put("afm", "AFM");
-        fieldsMap.put("FName", "Fname");
-        fieldsMap.put("LName", "Lname");
-        fieldsMap.put("phone", "Phone");
+        fieldsMap.put("afm", "afm");
+        fieldsMap.put("fName", "fname");
+        fieldsMap.put("lName", "lname");
+        fieldsMap.put("phone", "phone");
     }
     
     /**
@@ -51,15 +53,15 @@ public class Owner extends Entity{
      * @return
      */
     public String getFName() {
-        return FName;
+        return fName;
     }
 
     /**
      * Setter function for fname param
-     * @param FName
+     * @param fName
      */
-    public void setFName(String FName) {
-        this.FName = FName;
+    public void setFName(String fName) {
+        this.fName = fName;
     }
 
     /**
@@ -67,15 +69,15 @@ public class Owner extends Entity{
      * @return
      */
     public String getLName() {
-        return LName;
+        return lName;
     }
 
     /**
      * Setter function for lname param
-     * @param LName
+     * @param lName
      */
-    public void setLName(String LName) {
-        this.LName = LName;
+    public void setLName(String lName) {
+        this.lName = lName;
     }
 
     /**
@@ -102,9 +104,9 @@ public class Owner extends Entity{
      */
     public static Owner createOwnerFromResultSet(ResultSet rs) throws SQLException {
         return new Owner(
+                Integer.parseInt(rs.getString("AFM")),
                 rs.getString("Fname"),
                 rs.getString("Lname"),
-                Integer.parseInt(rs.getString("AFM")),
                 rs.getString("Phone"));
     }
 }
