@@ -8,3 +8,6 @@ Contributors:
 - [Issaris Nikolaos (nickaris1)](https://github.com/nickaris1 "Issaris Nikolaos")
 - [Kantas Nikolaos (nickantas)](https://github.com/nickantas "Kantas Nikolaos")
 - [Liapakis Georgios (g3ol)](https://github.com/G3OL "Liapakis Georgios")
+
+# Install
+Installation Instructions on [wiki](https://github.com/nickaris1/proigmenes_texnikes_programmatismou/wiki/Installation)!

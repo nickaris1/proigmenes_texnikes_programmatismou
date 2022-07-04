@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class CustomSearchController {
      * @param search json Search object
      */
     @RequestMapping(value = "/search/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public ResponseEntity<List<CustomSearch>> createLocation(@RequestBody CustomSearch search) {
+    public ResponseEntity<List<CustomSearch>> createLocation(@RequestBody CustomSearch search, HttpServletRequest request) {
+        log.info("CustomSearch");
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<CustomSearch>> searchRes = new AtomicReference<>();
 
 

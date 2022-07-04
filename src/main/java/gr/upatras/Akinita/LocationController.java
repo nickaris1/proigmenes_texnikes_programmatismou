@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class LocationController {
      * HTTP get function to find all locations
      */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Location> getLocations() {
+    public List<Location> getLocations(HttpServletRequest request) {
         log.info("Getting all locations");
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Location>> locations = new AtomicReference<>();
 
         DatabaseAccess.get("LOCATION", (rs, primaryKeys) -> locations.set(getLocationList(rs, primaryKeys)));
@@ -34,11 +36,14 @@ public class LocationController {
 
     /**
      * HTTP get function to find a specific location through its id
+     *
      * @param id of location
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Location> getLocation(@PathVariable("id") int id) {
+    public List<Location> getLocation(@PathVariable("id") int id, HttpServletRequest request) {
         log.info("Getting Location¨" + id);
+        log.info(Util.createRequestLogReport(request));
+
         AtomicReference<List<Location>> locations = new AtomicReference<>();
 
         DatabaseAccess.getById("LOCATION", id, (rs, primaryKeys) -> locations.set(getLocationList(rs, primaryKeys)));
@@ -48,11 +53,13 @@ public class LocationController {
 
     /**
      * HTTP post function to add a new location
+     *
      * @param location body json Location to add new location
      */
     @RequestMapping(value = "/locations/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public ResponseEntity<Location> createLocation(@RequestBody Location location) {
+    public ResponseEntity<Location> createLocation(@RequestBody Location location, HttpServletRequest request) {
         log.info("Will add a new location");
+        log.info(Util.createRequestLogReport(request));
         String q = DatabaseUtil.queryInsertParamCreator(location);
         boolean res = DatabaseAccess.addEntry("LOCATION", q);
 
@@ -64,11 +71,12 @@ public class LocationController {
     }
 
     /**
-     * 
      * @param location object in
      */
     @RequestMapping(value = "/locations/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public List<Location> searchLocation(@RequestBody Location location) {
+    public List<Location> searchLocation(@RequestBody Location location, HttpServletRequest request) {
+        log.info("Getting Location");
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Location>> locations = new AtomicReference<>();
         String query = DatabaseUtil.querySearchParamCreator(location);
         log.info(query);
@@ -78,10 +86,13 @@ public class LocationController {
 
     /**
      * HTTP delete function to delete a specific location through its id
+     *
      * @param id id of Location to delete
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteLocationById(@PathVariable("id") int id) {
+    public ResponseEntity<Void> deleteLocationById(@PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Deleting Location: " + id);
+        log.info(Util.createRequestLogReport(request));
         boolean res = DatabaseAccess.deleteEntry("LOCATION", id);
         if (res) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -92,11 +103,14 @@ public class LocationController {
 
     /**
      * HTTP patch function to update the location params
+     *
      * @param body json Location to update values
-     * @param id id of location to update
+     * @param id   id of location to update
      */
     @RequestMapping(value = "/locations/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
-    ResponseEntity<Location> updateLocation(@RequestBody Location body, @PathVariable("id") int id) {
+    ResponseEntity<Location> updateLocation(@RequestBody Location body, @PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Update location: " + id);
+        log.info(Util.createRequestLogReport(request));
         Boolean[] res = {null};
         AtomicReference<List<Location>> fLocations = new AtomicReference<>();
         DatabaseAccess.getById("LOCATION", id, ((rs, primaryKeys) -> {
@@ -128,7 +142,8 @@ public class LocationController {
 
     /**
      * Create Location List from database ResultSet
-     * @param rs the resultSet from database
+     *
+     * @param rs          the resultSet from database
      * @param primaryKeys the resultSet from database
      * @return return List&lt;Location&gt;
      */

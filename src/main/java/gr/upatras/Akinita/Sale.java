@@ -6,37 +6,50 @@ import java.util.HashMap;
 
 public class Sale extends Entity{
 	private Integer saleID;
-	private String Date;
-	private String Price;
-	private String TM;
-	private Boolean Rental;
-	private Integer Warranty;
-	private String StartDate;
-	private String EndDate;
-	private Integer PropId;
+	private String date;
+	private String price;
+	private String tm;
+	private Boolean rental;
+	private Integer warranty;
+	private String startDate;
+	private String endDate;
+	private Integer propId;
+
+	/**
+     * Constructor method for Sale class
+     * @param saleID		Sale's id
+     * @param date			Sale's date
+     * @param price			Sale's price
+     * @param tm			Sale's area in square meters
+	 * @param rental		Sale is a Rental instead
+	 * @param warranty		Rental's amount paid in advance
+	 * @param startDate		Rental's starting date
+	 * @param endDate		Rental's ending date
+	 * @param propId		The id of the property the sale relates to
+     */
 	
-	public Sale(Integer saleID, String Date, String Price, String TM, Boolean Rental, Integer Warranty,
-				String StartDate, String EndDate, Integer PropId) {
+	public Sale(Integer saleID, String date, String price, String tm, Boolean rental, Integer warranty,
+				String startDate, String endDate, Integer propId) {
 		this.saleID = saleID;
-		this.Date = Date;
-		this.Price = Price;
-		this.TM = TM;
-		this.Rental = Rental;
-		this.Warranty = Warranty;
-		this.StartDate = StartDate;
-		this.EndDate = EndDate;
-		this.PropId = PropId;
+		this.date = date;
+		this.price = price;
+		this.tm = tm;
+		this.rental = rental;
+		this.warranty = warranty;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.propId = propId;
 		
 		fieldsMap = new HashMap<>();
-		fieldsMap.put("saleID", "id");
-		fieldsMap.put("Date", "date");
-		fieldsMap.put("Price", "price");
-		fieldsMap.put("TM", "tm");
-		fieldsMap.put("Rental", "rental");
-		fieldsMap.put("Warranty", "warranty");
-		fieldsMap.put("StartDate", "startdate");
-		fieldsMap.put("EndDate", "enddate");
-		fieldsMap.put("PropId", "property_id");
+		fieldsMap.put("saleID", "Id");
+		fieldsMap.put("date", "Date");
+		fieldsMap.put("price", "Price");
+		fieldsMap.put("tm", "TM");
+		fieldsMap.put("rental", "Rental");
+		fieldsMap.put("warranty", "Warranty");
+		fieldsMap.put("startDate", "StartDate");
+		fieldsMap.put("endDate", "Enddate");
+		fieldsMap.put("propId", "Property_id");
 		
 	}
 	
@@ -49,61 +62,61 @@ public class Sale extends Entity{
 	}
 	
 	public String getDate() {
-		return Date;
+		return date;
 	}
 	
-	public void setDate(String Date) {
-		this.Date = Date;
+	public void setDate(String date) {
+		this.date = date;
 	}
 	public String getPrice() {
-		return Price;
+		return price;
 	}
 	
-	public void setPrice(String Price) {
-		this.Price = Price;
+	public void setPrice(String price) {
+		this.price = price;
 	}
 	public String getTM() {
-		return TM;
+		return tm;
 	}
 	
-	public void setTM(String TM) {
-		this.TM = TM;
+	public void setTM(String tm) {
+		this.tm = tm;
 	}
 	public Boolean getRental() {
-		return Rental;
+		return rental;
 	}
 	
-	public void setRental(Boolean Rental) {
-		this.Rental = Rental;
+	public void setRental(Boolean rental) {
+		this.rental = rental;
 	}
 	public Integer getWarranty() {
-		return Warranty;
+		return warranty;
 	}
 	
-	public void setWarranty(Integer Warranty) {
-		this.Warranty = Warranty;
+	public void setWarranty(Integer warranty) {
+		this.warranty = warranty;
 	}
 	public String getStartDate() {
-		return StartDate;
+		return startDate;
 	}
 	
-	public void setStartDate(String StartDate) {
-		this.StartDate = StartDate;
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 	public String getEndDate() {
-		return EndDate;
+		return endDate;
 	}
 	
-	public void setEndDate(String EndDate) {
-		this.EndDate = EndDate;
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 	
 	public Integer getPropId() {
-		return PropId;
+		return propId;
 	}
 	
-	public void setPropId(Integer PropId) {
-		this.PropId = PropId;
+	public void setPropId(Integer propId) {
+		this.propId = propId;
 	}
 
 
@@ -115,15 +128,15 @@ public class Sale extends Entity{
 	 */
 	public static Sale createSaleFromResultSet(ResultSet rs) throws SQLException {
 		return new Sale(
-				Integer.parseInt(rs.getString("ID")),
-				rs.getString("Date"),
-				rs.getString("Price"),
-				rs.getString("TM"),
-				Util.boolResultOrNull(rs.getString("Rental")),
-				Util.intResultOrNull(rs.getString("Warranty")),
-				rs.getString("StartDate"),
-				rs.getString("EndDate"),
-				Integer.parseInt(rs.getString("Property_id")));
+				Integer.parseInt(rs.getString("id")),
+				rs.getString("date"),
+				rs.getString("price"),
+				rs.getString("tm"),
+				Util.boolResultOrNull(rs.getString("rental")),
+				Util.intResultOrNull(rs.getString("warranty")),
+				rs.getString("startdate"),
+				rs.getString("enddate"),
+				Integer.parseInt(rs.getString("property_id")));
 	}
 
 }

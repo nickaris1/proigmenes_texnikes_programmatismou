@@ -70,7 +70,9 @@ jobs:
         # Release title (for automatic releases)
         title: "Release ${{steps.get_version.outputs.version}}.${{github.run_number}}" # optional
         # Assets to upload to the release
-        files: target/*jar-with-dependencies.jar # optional
+        files: |
+          target/*jar-with-dependencies.jar
+          database/database.db
 
 
 
