@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>gr.upatras</groupId>
 	<artifactId>Akinita</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Akinita</name>
 	<description>Project gia akinita</description>
 
