@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ public class SaleController {
 	private static final Logger log = LoggerFactory.getLogger(SaleController.class);
 	
     @RequestMapping(value = "/sales/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Sale> getSales() {
+    public List<Sale> getSales(HttpServletRequest request) {
         log.info("Getting all Sales");
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Sale>> sales = new AtomicReference<>();
 
         DatabaseAccess.get("SALE", (rs, primaryKeys) -> sales.set(getSaleList(rs, primaryKeys)));
@@ -28,8 +30,9 @@ public class SaleController {
     }
 
     @RequestMapping(value = "/sales/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Sale> getSale(@PathVariable("id") int id) {
+    public List<Sale> getSale(@PathVariable("id") int id, HttpServletRequest request) {
         log.info("Getting Sale¨" + id);
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Sale>> sales = new AtomicReference<>();
 
         DatabaseAccess.getById("SALE", id, (rs, primaryKeys) -> sales.set(getSaleList(rs, primaryKeys)));
@@ -38,8 +41,9 @@ public class SaleController {
     }
     
     @RequestMapping(value = "/sales/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public ResponseEntity<Sale> createSale(@RequestBody Sale sale) {
+    public ResponseEntity<Sale> createSale(@RequestBody Sale sale, HttpServletRequest request) {
         log.info("Will add a new Sale");
+        log.info(Util.createRequestLogReport(request));
         String q = DatabaseUtil.queryInsertParamCreator(sale);
         boolean res = DatabaseAccess.addEntry("SALE", q);
 
@@ -51,7 +55,8 @@ public class SaleController {
     }
     
     @RequestMapping(value = "/sales/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public List<Sale> searchSale(@RequestBody Sale sale) {
+    public List<Sale> searchSale(@RequestBody Sale sale, HttpServletRequest request) {
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Sale>> sales = new AtomicReference<>();
         String query = DatabaseUtil.querySearchParamCreator(sale);
         log.info(query);
@@ -60,7 +65,9 @@ public class SaleController {
     }
 
     @RequestMapping(value = "/sales/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteSaleById(@PathVariable("id") int id) {
+    public ResponseEntity<Void> deleteSaleById(@PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Deleting Sale: " + id);
+        log.info(Util.createRequestLogReport(request));
         boolean res = DatabaseAccess.deleteEntry("SALE", id);
         if (res) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -70,7 +77,9 @@ public class SaleController {
     }
     
     @RequestMapping(value = "/sales/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
-    ResponseEntity<Sale> updateSale(@RequestBody Sale body, @PathVariable("id") int id) {
+    ResponseEntity<Sale> updateSale(@RequestBody Sale body, @PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Update Sale: " + id);
+        log.info(Util.createRequestLogReport(request));
         Boolean[] res = {null};
         AtomicReference<List<Sale>> fSales = new AtomicReference<>();
         

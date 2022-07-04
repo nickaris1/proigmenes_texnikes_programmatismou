@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ public class OwnerController {
 	 * @return
 	 */
     @RequestMapping(value = "/owners/", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Owner> getOwners() {
+    public List<Owner> getOwners(HttpServletRequest request) {
         log.info("Getting all owners");
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Owner>> owners = new AtomicReference<>();
 
         DatabaseAccess.get("OWNER", (rs, primaryKeys) -> owners.set(getOwnerList(rs, primaryKeys)));
@@ -37,8 +39,9 @@ public class OwnerController {
      * @return
      */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.GET)
-    public List<Owner> getOwner(@PathVariable("id") int id) {
+    public List<Owner> getOwner(@PathVariable("id") int id, HttpServletRequest request) {
         log.info("Getting Owner¨" + id);
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Owner>> owners = new AtomicReference<>();
 
         DatabaseAccess.getById("OWNER", id, (rs, primaryKeys) -> owners.set(getOwnerList(rs, primaryKeys)));
@@ -52,8 +55,9 @@ public class OwnerController {
      * @return
      */
     @RequestMapping(value = "/owners/", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) {
+    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner, HttpServletRequest request) {
         log.info("Will add a new owner");
+        log.info(Util.createRequestLogReport(request));
         String q = DatabaseUtil.queryInsertParamCreator(owner);
         boolean res = DatabaseAccess.addEntry("OWNER", q);
 
@@ -70,7 +74,8 @@ public class OwnerController {
      * @return
      */
     @RequestMapping(value = "/owners/search", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.POST)
-    public List<Owner> searchOwner(@RequestBody Owner owner) {
+    public List<Owner> searchOwner(@RequestBody Owner owner, HttpServletRequest request) {
+        log.info(Util.createRequestLogReport(request));
         AtomicReference<List<Owner>> owners = new AtomicReference<>();
         String query = DatabaseUtil.querySearchParamCreator(owner);
         log.info(query);
@@ -84,7 +89,9 @@ public class OwnerController {
      * @return
      */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteOwnerById(@PathVariable("id") int id) {
+    public ResponseEntity<Void> deleteOwnerById(@PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Deleting owner: " + id);
+        log.info(Util.createRequestLogReport(request));
         boolean res = DatabaseAccess.deleteEntry("OWNER", id);
         if (res) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -100,7 +107,9 @@ public class OwnerController {
      * @return
      */
     @RequestMapping(value = "/owners/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"}, method = RequestMethod.PATCH)
-    ResponseEntity<Owner> updateOwner(@RequestBody Owner body, @PathVariable("id") int id) {
+    ResponseEntity<Owner> updateOwner(@RequestBody Owner body, @PathVariable("id") int id, HttpServletRequest request) {
+        log.info("Update Owner: " + id);
+        log.info(Util.createRequestLogReport(request));
         Boolean[] res = {null};
         AtomicReference<List<Owner>> fOwners = new AtomicReference<>();
         
