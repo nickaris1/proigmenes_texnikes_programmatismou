@@ -80,14 +80,14 @@ public class Modifiers extends Entity{
         this.fieldsMap.put("ownerAfm", "propertyOwnerAfm");
         this.fieldsMap.put("areaCode", "propertyAreaCode");
         this.fieldsMap.put("saleID", "saleID");
-        this.fieldsMap.put("Date", "saleDate");
-        this.fieldsMap.put("Price", "salePrice");
-        this.fieldsMap.put("TM", "saleTM");
-        this.fieldsMap.put("Rental", "saleRental");
-        this.fieldsMap.put("Warranty", "saleWarranty");
-        this.fieldsMap.put("StartDate", "saleStartDate");
-        this.fieldsMap.put("EndDate", "saleEndDate");
-        this.fieldsMap.put("PropId", "salePropId");
+        this.fieldsMap.put("date", "saleDate");
+        this.fieldsMap.put("price", "salePrice");
+        this.fieldsMap.put("tm", "saleTM");
+        this.fieldsMap.put("rental", "saleRental");
+        this.fieldsMap.put("warranty", "saleWarranty");
+        this.fieldsMap.put("startDate", "saleStartDate");
+        this.fieldsMap.put("endDate", "saleEndDate");
+        this.fieldsMap.put("propId", "salePropId");
     }
 
     public Modifiers() { init(); }
